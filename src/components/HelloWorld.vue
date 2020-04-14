@@ -13,9 +13,9 @@ const HelloWorld = defineComponent({
   setup() {
     const name = ref<string>("");
     return {
-      name
+      name,
     };
-  }
+  },
 });
 export default HelloWorld;
 </script>
