@@ -17,7 +17,19 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - run: yarn install --frozen-lockfile
-    - run: yarn lint
-    - run: yarn test:unit
-    - run: yarn test:e2e
+    - name: yarn install
+      run: yarn install --frozen-lockfile
+    - name: yarn lint
+      run: yarn lint
+    - name: yarn test:unit
+      run: yarn test:unit
+    - name: yarn test:e2e
+      run: yarn test:e2e
+    - name: yarn build
+      run: yarn build
+    - name: deploy to Firebase Hosting
+      uses: w9jds/firebase-action@master
+      with:
+        args: deploy
+      env:
+        FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
