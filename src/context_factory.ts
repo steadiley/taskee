@@ -1,4 +1,3 @@
-import "reflect-metadata";
 import { container } from "tsyringe";
 
 import { TaskUsecase } from "@/app";
@@ -11,7 +10,7 @@ type Context = {
 export const getResolvedContext = (): Context => {
   // switching what repository to use is controlled here
   container.register("TaskRepository", {
-    useClass: InmemoryTaskRepository,
+    useValue: new InmemoryTaskRepository(),
   });
 
   return {

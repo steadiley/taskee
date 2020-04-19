@@ -14,6 +14,7 @@ export class TaskUsecase {
     const now = dayjs(); // TODO: deal with timezone setting of user
     const startOfDay = now.startOf("day").toDate();
     const endOfDay = now.endOf("day").toDate();
+
     const tasks = await this.taskRepository.getTasksByDateRange(
       startOfDay,
       endOfDay
