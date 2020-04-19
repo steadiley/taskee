@@ -1,10 +1,14 @@
 import dayjs from "dayjs";
+import { injectable, inject } from "tsyringe";
 
 import { Task } from "@/domain/entity";
 import { TaskRepository } from "@/domain/repository";
 
+@injectable()
 export class TaskUsecase {
-  constructor(private taskRepository: TaskRepository) {}
+  constructor(
+    @inject("TaskRepository") private taskRepository: TaskRepository
+  ) {}
 
   async listTodaysTasks(): Promise<Task[]> {
     const now = dayjs(); // TODO: deal with timezone setting of user
