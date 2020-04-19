@@ -1,6 +1,6 @@
 import { InvalidArgumentError } from "@/errors";
 
-class Task {
+export class Task {
   private _updatedAt: Date;
   private _createdAt: Date;
 
