@@ -1,15 +1,15 @@
 <template>
-  <div class="hello">
-    <ul>
-      <li v-for="task in tasks" :key="task.id">
-        {{ task.title }}
-      </li>
-    </ul>
-  </div>
+  <ul>
+    <li v-for="task in tasks" :key="task.id">
+      {{ task.title }}
+    </li>
+  </ul>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, inject, onMounted } from "@vue/composition-api";
+
+import { assertIsDefined } from "@/lib/assert";
 import { Task } from "@/domain/entity";
 import { TaskUsecase } from "../app";
 
@@ -17,9 +17,8 @@ const TaskList = defineComponent({
   name: "TaskList",
   setup() {
     const taskUsecase = inject<TaskUsecase>("taskUsecase");
-    if (!taskUsecase) {
-      throw new Error("Assertion Error");
-    }
+    assertIsDefined(taskUsecase);
+
     const tasks = ref<Task[]>([]);
 
     onMounted(async () => {
