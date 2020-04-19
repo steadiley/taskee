@@ -13,8 +13,8 @@ import { defineComponent, ref, inject, onMounted } from "@vue/composition-api";
 import { Task } from "@/domain/entity";
 import { TaskUsecase } from "../app";
 
-const HelloWorld = defineComponent({
-  name: "HelloWorld",
+const TaskList = defineComponent({
+  name: "TaskList",
   setup() {
     const taskUsecase = inject<TaskUsecase>("taskUsecase");
     if (!taskUsecase) {
@@ -31,7 +31,7 @@ const HelloWorld = defineComponent({
     };
   },
 });
-export default HelloWorld;
+export default TaskList;
 </script>
 
 <style scoped lang="scss"></style>
