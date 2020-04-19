@@ -17,13 +17,16 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - name: yarn install, build
-      run: |
-            yarn install --frozen-lockfile
-            yarn lint
-            yarn test:unit
-            yarn test:e2e
-            yarn run build
+    - name: yarn install
+      run: yarn install --frozen-lockfile
+    - name: yarn lint
+      run: yarn lint
+    - name: yarn test-unit
+      run: yarn test:unit
+    - name: yarn test:e2e
+      run: yarn test:e2e
+    - name: yarn build
+      run: yarn build
     - name: deploy to Firebase Hosting
       uses: w9jds/firebase-action@master
       with:
