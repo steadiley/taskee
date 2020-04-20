@@ -4,8 +4,13 @@ import { injectable, inject } from "tsyringe";
 import { Task } from "@/domain/entity";
 import { TaskRepository } from "@/domain/repository";
 
+export interface TaskUsecase {
+  listTodaysTasks(): Promise<Task[]>;
+  listBacklogTasks(): Promise<Task[]>;
+}
+
 @injectable()
-export class TaskUsecase {
+export class AppTaskUsecase implements TaskUsecase {
   constructor(
     @inject("TaskRepository") private taskRepository: TaskRepository
   ) {}

@@ -1,1 +1,1 @@
-export { TaskUsecase } from "./task";
+export * from "./task";
