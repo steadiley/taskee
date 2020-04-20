@@ -13,21 +13,27 @@ import { assertIsDefined } from "@/lib/assert";
 import { Task } from "@/domain/entity";
 import { TaskUsecase } from "../app";
 
+const useTaskLists = (
+  taskUsecase: TaskUsecase,
+  onMounted: (val: Function) => void
+) => {
+  const tasks = ref<Task[]>([]);
+
+  onMounted(async () => {
+    tasks.value = await taskUsecase.listBacklogTasks();
+  });
+
+  return {
+    tasks,
+  };
+};
+
 const TaskList = defineComponent({
   name: "TaskList",
   setup() {
     const taskUsecase = inject<TaskUsecase>("taskUsecase");
     assertIsDefined(taskUsecase);
-
-    const tasks = ref<Task[]>([]);
-
-    onMounted(async () => {
-      tasks.value = await taskUsecase.listBacklogTasks();
-    });
-
-    return {
-      tasks,
-    };
+    return useTaskLists(taskUsecase, onMounted);
   },
 });
 export default TaskList;
