@@ -1,0 +1,23 @@
+
+
+body{
+  color: #454545;
+  font-family: -apple-system, BlinkMacSystemFont, 'Playfair Display' , 'Mplus 1p', "Helvetica Neue",  '游ゴシック Medium', '游ゴシック体', 'Yu Gothic Medium', YuGothic, "ヒラギノ角ゴ ProN W3", Hiragino Kaku Gothic ProN, Arial, "メイリオ", Meiryo, sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  font-size:15px;
+  line-height: 1.8;
+  -webkit-text-size-adjust: 100%;
+  line-height: 1.75;
+  letter-spacing: .5px;
+  position: relative;
+}
+
+h1,h2,h3,h4,h5,h6{
+  margin: 0;
+  padding: 0;
+}
+
+input, textarea, select, button{
+  width: 100%;
+}
