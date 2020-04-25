@@ -1,0 +1,83 @@
+/*************************************************************************
+ *..elememt styles
+ ************************************************************************/
+ a,  blockquote, body, code, dd, div, dl, dt, em, fieldset, font, form, h1, h2, h3, h4,
+ h5, h6, html, iframe, img, label, legend, li, object, ol, p, pre,
+ q, small, span, strong, table, tbody, textarea, td, tfoot, th, thead, tr, ul, input,
+ article, aside, dialog, footer, header, nav, main, menu, section { box-sizing:border-box; }
+ input, textarea, select, button { font-family:inherit; font-size:100%; }
+ :focus { outline:0; }
+ a:active, a:hover, a:link, a:visited { text-decoration:none; color:inherit; }
+ hr	{ margin:0; padding:0; border:none; background-color:#ccc; height:1px; }
+ table { border-collapse:collapse; border-spacing:0; }
+ th, td { empty-cells:show; border:none; font-weight:normal; }
+ th { text-align:center; vertical-align:middle; }
+ td { text-align:left; vertical-align:top; }
+ ul { list-style-type:none; margin:0; padding:0; }
+ iframe, img { border:none; text-decoration:none; }
+ html { *font-size:small; *font:x-small; }
+ body { margin:0; }
+ 
+ /*************************************************************************
+  *..class styles
+  ************************************************************************/
+ .clearfix		{ zoom:1; }
+ .clearfix:after { content:''; display:block; clear:both; height:0; overflow:hidden; }
+ .cleartype		{ transform-origin:0 0; transform:scale(1,1.01); }
+
+// input reset
+input[type="text"] {
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  outline: none;
+  background: none;
+  display: block;
+}
+
+input[type="radio"] {
+  display: none;
+}
+input[type="radio"]:checked + label {
+  background: #ff0000;
+}
+
+input[type="checkbox"] {
+  display: none;
+}
+input[type="checkbox"]:checked + label {
+  background: #ff0000;
+}
+
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border: none;
+  outline: none;
+  background: transparent;
+}
+
+textarea {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  resize: none;
+  padding: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+}
+
+button,
+input[type="submit"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    padding: 0;
+    border: none;
+    outline: none;
+    background: transparent;
+}
+
+
