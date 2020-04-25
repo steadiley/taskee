@@ -7,33 +7,21 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, inject, onMounted } from "@vue/composition-api";
+import { defineComponent, onMounted } from "@vue/composition-api";
 
-import { assertIsDefined } from "@/lib/assert";
-import { Task } from "@/domain/entity";
-import { TaskUsecase } from "../app";
-
-const useTaskLists = (
-  taskUsecase: TaskUsecase,
-  onMounted: (val: Function) => void
-) => {
-  const tasks = ref<Task[]>([]);
-
-  onMounted(async () => {
-    tasks.value = await taskUsecase.listBacklogTasks();
-  });
-
-  return {
-    tasks,
-  };
-};
+import { getModule } from "vuex-module-decorators";
+import { TaskStore } from "../store/task";
 
 const TaskList = defineComponent({
   name: "TaskList",
-  setup() {
-    const taskUsecase = inject<TaskUsecase>("taskUsecase");
-    assertIsDefined(taskUsecase);
-    return useTaskLists(taskUsecase, onMounted);
+  setup(_, { root }) {
+    const taskStore = getModule(TaskStore, root.$store);
+    onMounted(async () => {
+      await taskStore.fetchBacklogTasks();
+    });
+    return {
+      tasks: taskStore.tasks,
+    };
   },
 });
 export default TaskList;

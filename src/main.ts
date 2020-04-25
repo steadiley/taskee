@@ -11,9 +11,10 @@ import { getResolvedContext } from "./context_factory";
 Vue.config.productionTip = false;
 Vue.use(VueCompositionApi);
 
+const context = getResolvedContext();
+
 new Vue({
   router,
-  store,
-  provide: () => getResolvedContext(),
+  store: createStore(context),
   render: (h) => h(App),
 }).$mount("#app");

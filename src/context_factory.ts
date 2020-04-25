@@ -1,10 +1,11 @@
 import { container } from "tsyringe";
 
-import { TaskUsecase, AppTaskUsecase } from "@/app";
+import { AppTaskUsecase } from "@/app";
 import { InmemoryTaskRepository } from "@/infra/repository/inmemory/task";
+import { TaskStore } from "@/store/task";
 
-type Context = {
-  taskUsecase: TaskUsecase;
+export type Context = {
+  taskStore: TaskStore;
 };
 
 export const getResolvedContext = (): Context => {
@@ -13,7 +14,11 @@ export const getResolvedContext = (): Context => {
     useValue: new InmemoryTaskRepository(),
   });
 
+  container.register("TaskUsecase", {
+    useClass: AppTaskUsecase,
+  });
+
   return {
-    taskUsecase: container.resolve(AppTaskUsecase),
+    taskStore: container.resolve(TaskStore),
   };
 };
