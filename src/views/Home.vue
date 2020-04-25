@@ -1,16 +1,27 @@
 <template>
   <div class="home">
-    <TaskList />
+    <TaskList :tasks="tasks" />
   </div>
 </template>
 
-<script>
-import TaskList from "@/components/TaskList.vue";
+<script lang="ts">
+import { defineComponent, computed } from "@vue/composition-api";
 
-export default {
-  name: "Home",
+import TaskList from "@/components/TaskList.vue";
+import { useTaskStore } from "@/composables/use_store";
+
+const Home = defineComponent({
+  name: "TaskList",
   components: {
     TaskList,
   },
-};
+  setup() {
+    const taskStore = useTaskStore();
+    const tasks = computed(() => taskStore.tasks);
+    return {
+      tasks,
+    };
+  },
+});
+export default Home;
 </script>

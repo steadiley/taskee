@@ -7,6 +7,25 @@
   </div>
 </template>
 
+<script lang="ts">
+import { defineComponent, onMounted } from "@vue/composition-api";
+
+import { provideStore, useTaskStore } from "./composables/use_store";
+
+const App = defineComponent({
+  name: "TaskList",
+  setup(_, { root: { $store } }) {
+    provideStore($store);
+
+    const taskStore = useTaskStore();
+    onMounted(async () => {
+      await taskStore.fetchBacklogTasks();
+    });
+  },
+});
+export default App;
+</script>
+
 <style lang="scss">
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
