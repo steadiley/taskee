@@ -1,5 +1,6 @@
 import { Task } from "@/domain/entity";
 import { TaskRepository } from "@/domain/repository";
+import { injectable } from "inversify";
 
 const defaultTasks: Task[] = [
   new Task("1", "read a book", null, null),
@@ -7,6 +8,7 @@ const defaultTasks: Task[] = [
   new Task("3", "cook oyakodon", null, null),
 ];
 
+@injectable()
 export class InmemoryTaskRepository implements TaskRepository {
   private _tasks: Task[] = defaultTasks;
   constructor(tasks?: Task[]) {

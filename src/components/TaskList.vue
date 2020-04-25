@@ -7,20 +7,21 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted } from "@vue/composition-api";
+import { defineComponent, onMounted, reactive } from "@vue/composition-api";
 
 import { getModule } from "vuex-module-decorators";
 import { TaskStore } from "../store/task";
 
 const TaskList = defineComponent({
   name: "TaskList",
-  setup(_, { root }) {
-    const taskStore = getModule(TaskStore, root.$store);
+  setup(_, { root: { $store } }) {
+    const taskStore = getModule(TaskStore, $store);
     onMounted(async () => {
       await taskStore.fetchBacklogTasks();
     });
+    const tasks = reactive(taskStore.tasks);
     return {
-      tasks: taskStore.tasks,
+      tasks,
     };
   },
 });

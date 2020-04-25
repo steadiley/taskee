@@ -1,30 +1,26 @@
 import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
-import { injectable, inject } from "tsyringe";
 
 import { Task } from "@/domain/entity";
 import { TaskUsecase } from "@/app";
+import { lazyInject } from "@/app_context";
 
 export interface TaskState {
   tasks: Task[];
 }
 
 @Module({ name: "task" })
-@injectable()
 export class TaskStore extends VuexModule {
   tasks: Task[] = [];
-
-  constructor(@inject("TaskUsecase") private taskUsecase: TaskUsecase) {
-    super({});
-  }
+  @lazyInject("TaskUsecase") private taskUsecase!: TaskUsecase;
 
   @Mutation
-  addTasks(tasks: Task[]) {
-    this.tasks.concat(tasks);
+  setTasks(tasks: Task[]) {
+    this.tasks = tasks;
   }
 
   @Action
   async fetchBacklogTasks() {
     const tasks = await this.taskUsecase.listBacklogTasks();
-    this.addTasks(tasks);
+    this.setTasks(tasks);
   }
 }

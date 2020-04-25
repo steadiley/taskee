@@ -1,8 +1,8 @@
 import dayjs from "dayjs";
-import { injectable, inject } from "tsyringe";
 
 import { Task } from "@/domain/entity";
 import { TaskRepository } from "@/domain/repository";
+import { injectable, inject } from "inversify";
 
 export interface TaskUsecase {
   listTodaysTasks(): Promise<Task[]>;
