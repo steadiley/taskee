@@ -13,7 +13,7 @@ import { defineComponent, onMounted } from "@vue/composition-api";
 import { provideStore, useTaskStore } from "./composables/use_store";
 
 const App = defineComponent({
-  name: "TaskList",
+  name: "App",
   setup(_, { root: { $store } }) {
     provideStore($store);
 

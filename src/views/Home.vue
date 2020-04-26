@@ -11,7 +11,7 @@ import TaskList from "@/components/TaskList.vue";
 import { useTaskStore } from "@/composables/use_store";
 
 const Home = defineComponent({
-  name: "TaskList",
+  name: "Home",
   components: {
     TaskList,
   },

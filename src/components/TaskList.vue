@@ -9,21 +9,10 @@
 <script lang="ts">
 import { defineComponent } from "@vue/composition-api";
 
-import { Task } from "@/domain/entity";
-
-type Props = {
-  tasks: Task[];
-};
-
 const TaskList = defineComponent({
   name: "TaskList",
   props: {
-    tasks: Object,
-  },
-  setup(props: Props) {
-    return {
-      tasks: props.tasks,
-    };
+    tasks: Array,
   },
 });
 export default TaskList;
