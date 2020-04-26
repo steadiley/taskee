@@ -1,0 +1,51 @@
+
+//TODO: media query
+//TODO: min-width
+$breakpoint-up: (
+  'sm': 'screen and (min-width: 600px)',
+  'md': 'screen and (min-width: 800px)',
+  'lg': 'screen and (min-width: 1000px)',
+  'xl': 'screen and (min-width: 1150px)',
+  'xx': 'screen and (min-width: 1200px)',
+  'xxx': 'screen and (min-width: 1430px)'
+) !default;
+
+//TODO: max-width
+$breakpoint-down: (
+  'sm': 'screen and (max-width: 599px)',
+  'md': 'screen and (max-width: 799px)',
+  'lg': 'screen and (max-width: 999px)',
+  'xl': 'screen and (max-width: 1149px)',
+  'xx': 'screen and (max-width: 1119px)',
+  'xxx': 'screen and (max-width: 1429px)'
+) !default;
+
+//TODO: min-width
+@mixin mq-up($breakpoint: md) {
+  @media #{map-get($breakpoint-up, $breakpoint)} {
+    @content;
+  }
+}
+//TODO: max-width
+@mixin mq-down($breakpoint: md) {
+  @media #{map-get($breakpoint-down, $breakpoint)} {
+    @content;
+  }
+}
+
+//TODO: placeholder color
+@mixin placeholder($color) {
+  &::placeholder {
+    color: $color;
+  }
+
+  // IE
+  &:-ms-input-placeholder {
+    color: $color;
+  }
+
+  // Edge
+  &::-ms-input-placeholder {
+    color: $color;
+  }
+}
