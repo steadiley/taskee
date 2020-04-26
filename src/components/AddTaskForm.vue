@@ -13,17 +13,9 @@ const useAddForm = () => {
     title: "",
     dueDate: new Date(),
   });
-  const changeTitle = (newTitle: string) => {
-    form.title = newTitle;
-  };
-  const changeDueDate = (newDueDate: Date) => {
-    form.dueDate = newDueDate;
-  };
 
   return {
     form,
-    changeTitle,
-    changeDueDate,
   };
 };
 
