@@ -12,4 +12,10 @@ export interface TaskRepository {
    * Get tasks with no due date
    */
   getTasksWithNoDueDate(): Promise<Task[]>;
+
+  /**
+   *
+   * @param task a task to add
+   */
+  addTask(task: Task): Promise<void>;
 }

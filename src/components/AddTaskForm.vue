@@ -10,8 +10,10 @@
 <script lang="ts">
 import dayjs from "dayjs";
 import { defineComponent, reactive } from "@vue/composition-api";
+import { useTaskStore } from "../composables/use_store";
 
 const useAddForm = (emit: (event: string) => void) => {
+  const taskStore = useTaskStore();
   const form = reactive({
     title: "",
     dueDate: dayjs().format("YYYY-MM-DD"),
@@ -20,8 +22,7 @@ const useAddForm = (emit: (event: string) => void) => {
     emit("cancel");
   };
   const submit = () => {
-    console.log("submit called");
-    console.log(form);
+    taskStore.addTask(form.title, new Date(form.dueDate));
   };
 
   return { form, hideAddForm, submit };

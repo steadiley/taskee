@@ -23,4 +23,10 @@ export class TaskStore extends VuexModule {
     const tasks = await this.taskUsecase.listBacklogTasks();
     this.setTasks(tasks);
   }
+
+  @Action
+  async addTask(title: string, dueDate?: Date) {
+    const newTask = await this.taskUsecase.addTask({ title, dueDate });
+    this.setTasks(this.tasks.concat(newTask));
+  }
 }
