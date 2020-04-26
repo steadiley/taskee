@@ -2,7 +2,7 @@
   <div class="home">
     <TaskList :tasks="tasks" />
     <div v-if="shouldShowAddForm">
-      <AddTaskForm />
+      <AddTaskForm @cancel="hideAddForm" />
     </div>
     <template v-else>
       <AddTaskButton @click="showAddForm" />
@@ -31,10 +31,14 @@ const Home = defineComponent({
     const showAddForm = () => {
       shouldShowAddForm.value = true;
     };
+    const hideAddForm = () => {
+      shouldShowAddForm.value = false;
+    };
     const tasks = computed(() => taskStore.tasks);
     return {
       shouldShowAddForm,
       showAddForm,
+      hideAddForm,
       tasks,
     };
   },
