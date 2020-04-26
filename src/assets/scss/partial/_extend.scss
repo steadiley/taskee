@@ -1,0 +1,178 @@
+@for $i from 0 through 200 {
+  $percentage: percentage($i / 100);
+
+  .width-#{$i} {
+    width: $percentage !important;
+  }
+
+  .height-#{$i} {
+    height: $percentage !important;
+  }
+
+  .fs_per_#{$i} {
+    font-size: $percentage !important;
+  }
+
+  .m-#{$i} {
+    margin: $percentage !important;
+  }
+
+  .mt-#{$i} {
+    margin: $percentage !important;
+  }
+
+  .mr-#{$i} {
+    margin-right: $percentage !important;
+  }
+
+  .mb-#{$i} {
+    margin-bottom: $percentage !important;
+  }
+
+  .ml-#{$i} {
+    margin-left: $percentage !important;
+  }
+
+  .p-#{$i} {
+    padding: $percentage !important;
+  }
+
+  .pt-#{$i} {
+    padding-top: $percentage !important;
+  }
+
+  .pr-#{$i} {
+    padding-right: $percentage !important;
+  }
+
+  .pb-#{$i} {
+    padding-bottom: $percentage !important;
+  }
+
+  .pl-#{$i} {
+    padding-left: $percentage !important;
+  }
+}
+
+$levels: (
+  "1": 0.1,
+  "2": 0.2,
+  "3": 0.3,
+  "4": 0.4,
+  "5": 0.5,
+  "6": 0.6,
+  "7": 0.7,
+  "8": 0.8,
+  "9": 0.9,
+  "10": 1
+);
+@each $level, $number in $levels {
+  .elevation-#{$level} {
+    box-shadow: 0 3px 3px rgba(0, 0, 0, $number);
+  }
+  .opacity-#{$level} {
+    opacity: $number;
+  }
+}
+
+$displays: (
+  "flex": flex,
+  "block": block,
+  "inline-block": inline-block,
+  "inline": inline,
+  "none": none
+);
+
+@each $type, $property in $displays {
+  .d-#{$type} {
+    display: $property;
+  }
+}
+
+$flex-directions: (
+  "row": row,
+  "row-reverse": row-reverse,
+  "column": column,
+  "column-reverse": column-reverse
+);
+@each $type, $property in $flex-directions {
+  .direction-#{$type} {
+    flex-direction: $property;
+  }
+}
+
+$flex-wraps: (
+  "nowrap": nowrap,
+  "wrap": wrap,
+  "wrap-reverse": wrap-reverse
+);
+@each $type, $property in flex-wraps {
+  .wrap-#{$type} {
+    flex-wrap: $property;
+  }
+}
+
+$justify-contents: (
+  "flex-start": flex-start,
+  "flex-end": flex-end,
+  "space-around": space-around,
+  "space-between": space-between,
+  "space-evenly": space-evenly
+);
+@each $type, $property in $justify-contents {
+  .justify-#{$type} {
+    justify-content: $property;
+  }
+}
+
+$align-items: (
+  "stretch": stretch,
+  "flex-start": flex-start,
+  "flex-end": flex-end,
+  "center": center,
+  "baseline": baseline
+);
+@each $type, $property in $align-items {
+  .align-#{$type} {
+    align-items: $property;
+  }
+}
+
+$align-contents: (
+  "stretch": stretch,
+  "flex-start": flex-start,
+  "flex-end": flex-end,
+  "center": center,
+  "space-between": space-between,
+  "space-around": space-around
+);
+@each $type, $property in $align-contents {
+  .contents-#{$type} {
+    align-content: $property;
+  }
+}
+
+$text-aligns: (
+  "left": left,
+  "center": center,
+  "right": right
+);
+@each $type, $property in $text-aligns {
+  .text-#{$type} {
+    text-align: $property;
+  }
+}
+
+$floats: (
+  "left": left,
+  "right": right
+);
+@each $type, $property in $floats {
+  .float-#{$type} {
+    float: $property;
+  }
+}
+
+.font-weight-bold {
+  font-weight: bold;
+}
