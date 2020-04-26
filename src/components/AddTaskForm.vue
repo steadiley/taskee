@@ -1,6 +1,6 @@
 <template>
   <form @submit="submit">
-    <input class="title-text-box" v-model="form.title" />
+    <input class="title-text-box" v-model="form.title" required />
     <input class="due-date-text-box" v-model="form.dueDate" type="date" />
     <button type="submit">Add</button>
     <button @click="hideAddForm">Cancel</button>
@@ -13,16 +13,20 @@ import { defineComponent, reactive } from "@vue/composition-api";
 import { useTaskStore } from "../composables/use_store";
 
 const useAddForm = (emit: (event: string) => void) => {
-  const taskStore = useTaskStore();
-  const form = reactive({
+  const createInitialFormState = () => ({
     title: "",
     dueDate: dayjs().format("YYYY-MM-DD"),
   });
+  const taskStore = useTaskStore();
+  const form = reactive(createInitialFormState());
   const hideAddForm = () => {
     emit("cancel");
   };
-  const submit = () => {
-    taskStore.addTask(form.title, new Date(form.dueDate));
+  const submit = async () => {
+    await taskStore.addTask(form.title, new Date(form.dueDate));
+    const initialFormState = createInitialFormState();
+    form.title = initialFormState.title;
+    form.dueDate = initialFormState.dueDate;
   };
 
   return { form, hideAddForm, submit };
