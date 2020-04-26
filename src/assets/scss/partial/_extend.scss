@@ -1,6 +1,5 @@
-$num: 1;
 @for $i from 0 through 200 {
-  $percentage: percentage(($i * $num) / 100);
+  $percentage: percentage($i / 100);
 
   .width-#{$i} {
     width: $percentage !important;
@@ -117,7 +116,8 @@ $justify-contents: (
   "flex-start": flex-start,
   "flex-end": flex-end,
   "space-around": space-around,
-  "space-between": space-between
+  "space-between": space-between,
+  "space-evenly": space-evenly
 );
 @each $type, $property in $justify-contents {
   .justify-#{$type} {

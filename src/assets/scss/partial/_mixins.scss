@@ -39,11 +39,6 @@ $breakpoint-down: (
     color: $color;
   }
 
-  // IE
-  &:-ms-input-placeholder {
-    color: $color;
-  }
-
   // Edge
   &::-ms-input-placeholder {
     color: $color;
