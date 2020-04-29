@@ -16,7 +16,6 @@ export class FirestoreTaskRepository implements TaskRepository {
       location.hostname === "localhost"
     ) {
       this.db.settings({
-        // FIXME: remove this hardcoded value!
         host: `localhost:${process.env.VUE_APP_FIREBASE_FIRESTORE_EMULATOR_PORT}`,
         ssl: false,
       });
