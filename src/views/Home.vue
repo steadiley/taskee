@@ -1,18 +1,27 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+    <TaskList :tasks="tasks" />
   </div>
 </template>
 
-<script>
-// @ is an alias to /src
-import HelloWorld from "@/components/HelloWorld.vue";
+<script lang="ts">
+import { defineComponent, computed } from "@vue/composition-api";
 
-export default {
+import TaskList from "@/components/TaskList.vue";
+import { useTaskStore } from "@/composables/use_store";
+
+const Home = defineComponent({
   name: "Home",
   components: {
-    HelloWorld,
+    TaskList,
   },
-};
+  setup() {
+    const taskStore = useTaskStore();
+    const tasks = computed(() => taskStore.tasks);
+    return {
+      tasks,
+    };
+  },
+});
+export default Home;
 </script>
