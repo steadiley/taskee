@@ -26,4 +26,8 @@ export class InmemoryTaskRepository implements TaskRepository {
   async getTasksWithNoDueDate(): Promise<Task[]> {
     return this._tasks.filter((task) => !task.dueDate);
   }
+
+  async addTask(task: Task): Promise<void> {
+    this._tasks.concat(task);
+  }
 }
