@@ -11,5 +11,4 @@ const firebaseConfig = {
   appId: process.env.VUE_APP_FIREBASE_APP_ID,
 };
 
-// TODO: to be fixed via environment variables
 firebase.initializeApp(firebaseConfig);
