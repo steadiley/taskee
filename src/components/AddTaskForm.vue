@@ -23,7 +23,10 @@ const useAddForm = (emit: (event: string) => void) => {
     emit("cancel");
   };
   const submit = async () => {
-    await taskStore.addTask(form.title, new Date(form.dueDate));
+    await taskStore.addTask({
+      title: form.title,
+      dueDate: new Date(form.dueDate),
+    });
     const initialFormState = createInitialFormState();
     form.title = initialFormState.title;
     form.dueDate = initialFormState.dueDate;
