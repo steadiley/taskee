@@ -1,11 +1,18 @@
 import dayjs from "dayjs";
 import cuid from "cuid";
 
-import { Task } from "@/domain/entity";
-import { TaskRepository } from "@/domain/repository";
+import { Task, TaskEvent } from "@/domain/entity";
+import { TaskRepository, TaskEventRepository } from "@/domain/repository";
 import { injectable, inject } from "inversify";
+import { EventType } from "@/domain/entity/task_event";
 
 interface AddTaskCommand {
+  title: string;
+  dueDate?: Date;
+}
+
+interface AddTaskEventCommand {
+  taskId: string;
   title: string;
   dueDate?: Date;
 }
@@ -19,7 +26,9 @@ export interface TaskUsecase {
 @injectable()
 export class AppTaskUsecase implements TaskUsecase {
   constructor(
-    @inject("TaskRepository") private taskRepository: TaskRepository
+    @inject("TaskRepository") private taskRepository: TaskRepository,
+    @inject("TaskEventRepository")
+    private taskEventRepository: TaskEventRepository
   ) {}
 
   async listTodaysTasks(): Promise<Task[]> {
@@ -44,5 +53,34 @@ export class AppTaskUsecase implements TaskUsecase {
     const task = new Task(id, title, dueDate);
     await this.taskRepository.addTask(task);
     return task;
+  }
+
+  async startTask(taskId: string) {
+    const lastAddedEvent = await this.taskEventRepository.findLastAdded();
+    if (lastAddedEvent && lastAddedEvent.type === EventType.START) {
+      await this.taskEventRepository.add(
+        lastAddedEvent.taskId,
+        new TaskEvent(cuid(), lastAddedEvent.taskId, EventType.STOP)
+      );
+    }
+    await this.taskEventRepository.add(
+      taskId,
+      new TaskEvent(cuid(), taskId, EventType.START)
+    );
+  }
+
+  async stopTask(taskId: string) {
+    const lastAddedEvent = await this.taskEventRepository.findLastAdded();
+    if (
+      !lastAddedEvent ||
+      lastAddedEvent.taskId !== taskId ||
+      lastAddedEvent.type === EventType.START
+    ) {
+      throw new Error(`Task ID ${taskId} is not running`);
+    }
+    await this.taskEventRepository.add(
+      taskId,
+      new TaskEvent(cuid(), taskId, EventType.STOP)
+    );
   }
 }

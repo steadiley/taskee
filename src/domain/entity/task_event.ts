@@ -9,7 +9,11 @@ export class TaskEvent {
   private _updatedAt: Date;
   private _createdAt: Date;
 
-  constructor(private _id: string, private _type: EventType) {
+  constructor(
+    private _id: string,
+    private _taskId: string,
+    private _type: EventType
+  ) {
     const now = new Date();
     this._updatedAt = now;
     this._createdAt = now;
@@ -17,6 +21,10 @@ export class TaskEvent {
 
   get id() {
     return this._id;
+  }
+
+  get taskId() {
+    return this._taskId;
   }
 
   get type() {
