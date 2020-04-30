@@ -2,9 +2,12 @@ import { Container } from "inversify";
 import getDecorators from "inversify-inject-decorators";
 
 import { TaskUsecase, AppTaskUsecase } from "@/app";
-import { InmemoryTaskRepository } from "@/infra/repository/inmemory/task";
+import {
+  InmemoryTaskRepository,
+  InmemoryTaskEventRepository,
+} from "@/infra/repository/inmemory";
 import { FirestoreTaskRepository } from "@/infra/repository/firestore/task";
-import { TaskRepository } from "./domain/repository";
+import { TaskRepository, TaskEventRepository } from "./domain/repository";
 
 const container = new Container();
 
@@ -17,6 +20,10 @@ if (process.env.NODE_ENV === "test") {
     .bind<TaskRepository>("TaskRepository")
     .toConstantValue(new FirestoreTaskRepository());
 }
+
+container
+  .bind<TaskEventRepository>("TaskEventRepository")
+  .toConstantValue(new InmemoryTaskEventRepository());
 
 container
   .bind<TaskUsecase>("TaskUsecase")
