@@ -1,6 +1,10 @@
 <template>
   <div class="home">
-    <BulletinBoard v-if="runningTask" :runningTask="runningTask" />
+    <BulletinBoard
+      v-if="runningTask"
+      :runningTask="runningTask"
+      :startedAt="new Date()"
+    />
     <TaskList :tasks="tasks" :runningTask="runningTask" />
     <div v-if="shouldShowAddForm">
       <AddTaskForm @cancel="hideAddForm" />
