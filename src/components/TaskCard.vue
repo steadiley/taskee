@@ -17,7 +17,7 @@ interface Props {
   runningTask: Task;
 }
 
-const useTimer = (taskId: string) => {
+export const useTimer = (taskId: string) => {
   const taskStore = useTaskStore();
   const toggleTimer = async (isRunning: boolean) => {
     if (isRunning) {
