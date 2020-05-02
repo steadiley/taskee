@@ -6,7 +6,7 @@
         ellapsedTime.seconds
       }}
     </h3>
-    <div @click="stopTimer">STOP</div>
+    <button @click="stopTimer">STOP</button>
   </div>
 </template>
 
