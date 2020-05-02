@@ -18,4 +18,21 @@ export interface TaskRepository {
    * @param task a task to add
    */
   addTask(task: Task): Promise<void>;
+
+  /**
+   * get currently running task
+   */
+  getRunningTask(): Promise<Task | null>;
+
+  /**
+   *
+   * @param id set currently running task with `id`
+   */
+  updateRunningTask(id: string): Promise<void>;
+
+  /**
+   *
+   * @param id task id for which to fetch corresponding task. returns null if not found.
+   */
+  getTaskById(id: string): Promise<Task | null>;
 }

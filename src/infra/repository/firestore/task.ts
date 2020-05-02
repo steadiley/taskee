@@ -23,7 +23,7 @@ export class FirestoreTaskRepository implements TaskRepository {
   }
 
   async getTasksByDateRange(from: Date, to: Date): Promise<Task[]> {
-    const result = await this.getTasksRef()
+    const result = await this.getTasksCollectionRef()
       .where("dueDate", ">=", from)
       .where("dueDate", "<=", to)
       .get();
@@ -36,7 +36,9 @@ export class FirestoreTaskRepository implements TaskRepository {
   }
 
   async getTasksWithNoDueDate(): Promise<Task[]> {
-    const result = await this.getTasksRef().where("dueDate", "==", null).get();
+    const result = await this.getTasksCollectionRef()
+      .where("dueDate", "==", null)
+      .get();
 
     const tasks = result.docs.map((doc) => {
       const data: firestore.DocumentData = doc.data();
@@ -46,7 +48,34 @@ export class FirestoreTaskRepository implements TaskRepository {
   }
 
   async addTask(task: Task): Promise<void> {
-    await this.getTasksRef().doc(task.id).set(this.toTaskDocFromEntity(task));
+    await this.getTasksCollectionRef()
+      .doc(task.id)
+      .set(this.toTaskDocFromEntity(task));
+  }
+
+  async getRunningTask(): Promise<Task | null> {
+    const result = await this.getTasksRef().get();
+    const data = result.data();
+    const taskId = data?.runningTaskId;
+    if (!taskId) {
+      return null;
+    }
+    return this.getTaskById(taskId);
+  }
+
+  async updateRunningTask(id: string): Promise<void> {
+    await this.getTasksRef().update({
+      runningTaskId: id,
+    });
+  }
+
+  async getTaskById(id: string): Promise<Task | null> {
+    const result = await this.getTasksCollectionRef().doc(id).get();
+    const data = result.data();
+    if (!data) {
+      return null;
+    }
+    return this.fromTaskDocToEntity(data);
   }
 
   private toTaskDocFromEntity(task: Task): firestore.DocumentData {
@@ -64,9 +93,12 @@ export class FirestoreTaskRepository implements TaskRepository {
     return new Task(data.id, data.title, data.dueDate, data.finishdedAt);
   }
 
-  private getTasksRef(): firestore.CollectionReference<firestore.DocumentData> {
+  private getTasksCollectionRef() {
+    return this.getTasksRef().collection("collection");
+  }
+
+  private getTasksRef() {
     const userId = "taro"; // TODO: will be replaced by currently logged in user id
-    const tasksRef = this.db.collection(`users/${userId}/tasks`);
-    return tasksRef;
+    return this.db.collection(`users/${userId}`).doc("tasks");
   }
 }

@@ -1,18 +1,11 @@
 import dayjs from "dayjs";
-import cuid from "cuid";
 
-import { Task, TaskEvent } from "@/domain/entity";
+import { Task } from "@/domain/entity";
+import { TaskFactory, TaskEventFactoy } from "@/domain/factory";
 import { TaskRepository, TaskEventRepository } from "@/domain/repository";
 import { injectable, inject } from "inversify";
-import { EventType } from "@/domain/entity/task_event";
 
 interface AddTaskCommand {
-  title: string;
-  dueDate?: Date;
-}
-
-interface AddTaskEventCommand {
-  taskId: string;
   title: string;
   dueDate?: Date;
 }
@@ -21,6 +14,8 @@ export interface TaskUsecase {
   listTodaysTasks(): Promise<Task[]>;
   listBacklogTasks(): Promise<Task[]>;
   addTask(addTaskCommand: AddTaskCommand): Promise<Task>;
+  startTask(taskId: string): Promise<void>;
+  stopRunningTask(): Promise<void>;
 }
 
 @injectable()
@@ -49,38 +44,27 @@ export class AppTaskUsecase implements TaskUsecase {
   }
 
   async addTask({ title, dueDate }: AddTaskCommand): Promise<Task> {
-    const id = cuid();
-    const task = new Task(id, title, dueDate);
+    const task = TaskFactory.createTask(title, dueDate);
     await this.taskRepository.addTask(task);
     return task;
   }
 
   async startTask(taskId: string) {
-    const lastAddedEvent = await this.taskEventRepository.findLastAdded();
-    if (lastAddedEvent && lastAddedEvent.type === EventType.START) {
-      await this.taskEventRepository.add(
-        lastAddedEvent.taskId,
-        new TaskEvent(cuid(), lastAddedEvent.taskId, EventType.STOP)
-      );
-    }
+    await this.stopRunningTask();
+    await this.taskRepository.updateRunningTask(taskId);
     await this.taskEventRepository.add(
       taskId,
-      new TaskEvent(cuid(), taskId, EventType.START)
+      TaskEventFactoy.createStartEvent(taskId)
     );
   }
 
-  async stopTask(taskId: string) {
-    const lastAddedEvent = await this.taskEventRepository.findLastAdded();
-    if (
-      !lastAddedEvent ||
-      lastAddedEvent.taskId !== taskId ||
-      lastAddedEvent.type === EventType.START
-    ) {
-      throw new Error(`Task ID ${taskId} is not running`);
+  async stopRunningTask() {
+    const runningTask = await this.taskRepository.getRunningTask();
+    if (runningTask) {
+      await this.taskEventRepository.add(
+        runningTask.id,
+        TaskEventFactoy.createStopEvent(runningTask.id)
+      );
     }
-    await this.taskEventRepository.add(
-      taskId,
-      new TaskEvent(cuid(), taskId, EventType.STOP)
-    );
   }
 }
