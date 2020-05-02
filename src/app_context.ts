@@ -1,7 +1,7 @@
 import { Container } from "inversify";
 import getDecorators from "inversify-inject-decorators";
 
-import { TaskUsecase, AppTaskUsecase } from "@/app";
+import { TaskUsecase, AppTaskUsecase } from "@/apps";
 import { InmemoryTaskRepository } from "@/infra/repository/inmemory/task";
 import { FirestoreTaskRepository } from "@/infra/repository/firestore/task";
 import { TaskRepository } from "./domain/repository";
