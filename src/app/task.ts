@@ -20,8 +20,8 @@ export interface TaskUsecase {
   listBacklogTasks(): Promise<Task[]>;
   listTaskEvents(): Promise<TaskEvent[]>;
   addTask(addTaskCommand: AddTaskCommand): Promise<Task>;
-  addTaskEvent(addTaskEventCommand: AddTaskEventCommand): Promise<void>;
-  updateTaskEvent(taskEvent: TaskEvent): Promise<void>;
+  addTaskEvent(addTaskEventCommand: AddTaskEventCommand): Promise<TaskEvent>;
+  updateTaskEvent(taskEvent: TaskEvent): Promise<TaskEvent>;
 }
 
 @injectable()
@@ -55,17 +55,19 @@ export class AppTaskUsecase implements TaskUsecase {
     return task;
   }
 
-  async addTaskEvent({ taskId }: AddTaskEventCommand): Promise<void> {
-    await this.taskEventRepository.add(
-      new TaskEvent(cuid(), taskId, new Date())
-    );
+  async addTaskEvent({ taskId }: AddTaskEventCommand): Promise<TaskEvent> {
+    const taskEvent = new TaskEvent(cuid(), taskId, new Date());
+    await this.taskEventRepository.add(taskEvent);
+    return taskEvent;
   }
 
-  async updateTaskEvent(taskEvent: TaskEvent): Promise<void> {
+  async updateTaskEvent(taskEvent: TaskEvent): Promise<TaskEvent> {
     await this.taskEventRepository.update(taskEvent);
+    return taskEvent;
   }
 
   async listTaskEvents(): Promise<TaskEvent[]> {
-    return await this.taskEventRepository.findAll();
+    const taskEvents = await this.taskEventRepository.findAll();
+    return taskEvents;
   }
 }

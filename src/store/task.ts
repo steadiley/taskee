@@ -12,6 +12,7 @@ export interface TaskState {
 export class TaskStore extends VuexModule {
   tasks: Task[] = [];
   taskEvents: TaskEvent[] = [];
+
   @lazyInject("TaskUsecase") private taskUsecase!: TaskUsecase;
 
   @Mutation
@@ -19,9 +20,34 @@ export class TaskStore extends VuexModule {
     this.tasks = tasks;
   }
 
+  @Mutation
+  setTaskEvents(taskEvents: TaskEvent[]) {
+    this.taskEvents = taskEvents;
+  }
+
+  @Mutation
+  addTaskEvent(taskEvent: TaskEvent) {
+    this.taskEvents.push(taskEvent);
+  }
+
+  @Mutation
+  updateTaskEvent(taskEvent: TaskEvent) {
+    const index = this.taskEvents.findIndex(
+      (event) => event.id === taskEvent.id
+    );
+    if (index === -1) {
+      return;
+    }
+    this.taskEvents = [
+      ...this.taskEvents.slice(0, index),
+      taskEvent,
+      ...this.taskEvents.slice(index + 1),
+    ];
+  }
+
   @Action
-  async fetchBacklogTasks() {
-    const tasks = await this.taskUsecase.listBacklogTasks();
+  async fetchTodaysTasks() {
+    const tasks = await this.taskUsecase.listTodaysTasks();
     this.setTasks(tasks);
   }
 
@@ -34,7 +60,7 @@ export class TaskStore extends VuexModule {
   @Action
   async fetchTaskEvents() {
     const taskEvents = await this.taskUsecase.listTaskEvents();
-    this.taskEvents = taskEvents;
+    this.setTaskEvents(taskEvents);
   }
 
   @Action
@@ -42,16 +68,20 @@ export class TaskStore extends VuexModule {
     const maybeIncompleteTaskEvent = this.incompleteTaskEvent;
     if (maybeIncompleteTaskEvent) {
       maybeIncompleteTaskEvent.endedAt = new Date();
-      await this.taskUsecase.updateTaskEvent(maybeIncompleteTaskEvent);
+      const updatedTaskEvent = await this.taskUsecase.updateTaskEvent(
+        maybeIncompleteTaskEvent
+      );
+      this.updateTaskEvent(updatedTaskEvent);
     }
   }
 
   @Action
   async startTask(id: string) {
     await this.stopRunningTask();
-    await this.taskUsecase.addTaskEvent({
+    const taskEvent = await this.taskUsecase.addTaskEvent({
       taskId: id,
     });
+    this.addTaskEvent(taskEvent);
   }
 
   get incompleteTaskEvent() {

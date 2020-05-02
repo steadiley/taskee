@@ -19,7 +19,10 @@ const App = defineComponent({
 
     const taskStore = useTaskStore();
     onMounted(async () => {
-      await taskStore.fetchBacklogTasks();
+      await Promise.all([
+        taskStore.fetchTodaysTasks(),
+        taskStore.fetchTaskEvents(),
+      ]);
     });
   },
 });

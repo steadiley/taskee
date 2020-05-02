@@ -8,14 +8,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "@vue/composition-api";
-import { Task, TaskEvent } from "../domain/entity";
+import { defineComponent, computed } from "@vue/composition-api";
+import { Task } from "../domain/entity";
 import { useTaskStore } from "../composables/use_store";
 
 interface Props {
   task: Task;
-  events: TaskEvent[];
-  isRunning: boolean;
+  runningTask: Task;
 }
 
 const useTimer = (taskId: string) => {
@@ -36,13 +35,16 @@ const TaskCard = defineComponent({
   name: "TaskCard",
   props: {
     task: Object,
-    events: Object,
-    isRunning: Boolean,
+    runningTask: Object,
   },
-  setup({ task }: Props) {
-    const { toggleTimer } = useTimer(task.id);
+  setup(props: Props) {
+    const { toggleTimer } = useTimer(props.task.id);
+    const isRunning = computed(() => {
+      return props.runningTask && props.task.id === props.runningTask.id;
+    });
     return {
       toggleTimer,
+      isRunning,
     };
   },
 });
