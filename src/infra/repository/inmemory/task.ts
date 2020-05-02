@@ -31,16 +31,6 @@ export class InmemoryTaskRepository implements TaskRepository {
     this._tasks.concat(task);
   }
 
-  async getRunningTask(): Promise<Task | null> {
-    // FIXME: not functioning
-    return null;
-  }
-
-  async updateRunningTask(): Promise<void> {
-    // FIXME: not functioning
-    return;
-  }
-
   async getTaskById(): Promise<Task | null> {
     // FIXME: not functioning
     return null;

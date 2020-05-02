@@ -1,7 +1,8 @@
 import dayjs from "dayjs";
+import cuid from "cuid";
 
-import { Task } from "@/domain/entity";
-import { TaskFactory, TaskEventFactoy } from "@/domain/factory";
+import { Task, TaskEvent } from "@/domain/entity";
+import { TaskFactory } from "@/domain/factory";
 import { TaskRepository, TaskEventRepository } from "@/domain/repository";
 import { injectable, inject } from "inversify";
 
@@ -10,12 +11,17 @@ interface AddTaskCommand {
   dueDate?: Date;
 }
 
+interface AddTaskEventCommand {
+  taskId: string;
+}
+
 export interface TaskUsecase {
   listTodaysTasks(): Promise<Task[]>;
   listBacklogTasks(): Promise<Task[]>;
+  listTaskEvents(): Promise<TaskEvent[]>;
   addTask(addTaskCommand: AddTaskCommand): Promise<Task>;
-  startTask(taskId: string): Promise<void>;
-  stopRunningTask(): Promise<void>;
+  addTaskEvent(addTaskEventCommand: AddTaskEventCommand): Promise<void>;
+  updateTaskEvent(taskEvent: TaskEvent): Promise<void>;
 }
 
 @injectable()
@@ -49,22 +55,17 @@ export class AppTaskUsecase implements TaskUsecase {
     return task;
   }
 
-  async startTask(taskId: string) {
-    await this.stopRunningTask();
-    await this.taskRepository.updateRunningTask(taskId);
+  async addTaskEvent({ taskId }: AddTaskEventCommand): Promise<void> {
     await this.taskEventRepository.add(
-      taskId,
-      TaskEventFactoy.createStartEvent(taskId)
+      new TaskEvent(cuid(), taskId, new Date())
     );
   }
 
-  async stopRunningTask() {
-    const runningTask = await this.taskRepository.getRunningTask();
-    if (runningTask) {
-      await this.taskEventRepository.add(
-        runningTask.id,
-        TaskEventFactoy.createStopEvent(runningTask.id)
-      );
-    }
+  async updateTaskEvent(taskEvent: TaskEvent): Promise<void> {
+    await this.taskEventRepository.update(taskEvent);
+  }
+
+  async listTaskEvents(): Promise<TaskEvent[]> {
+    return await this.taskEventRepository.findAll();
   }
 }

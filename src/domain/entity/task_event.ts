@@ -1,23 +1,12 @@
 import { InvalidArgumentError } from "@/errors";
 
-export enum EventType {
-  START = "START",
-  STOP = "STOP",
-}
-
 export class TaskEvent {
-  private _updatedAt: Date;
-  private _createdAt: Date;
-
   constructor(
     private _id: string,
     private _taskId: string,
-    private _type: EventType
-  ) {
-    const now = new Date();
-    this._updatedAt = now;
-    this._createdAt = now;
-  }
+    private _startedAt: Date,
+    private _endedAt: Date | null = null
+  ) {}
 
   get id() {
     return this._id;
@@ -27,34 +16,23 @@ export class TaskEvent {
     return this._taskId;
   }
 
-  get type() {
-    return this._type;
+  get startedAt(): Date {
+    return this._startedAt;
   }
-  set type(newType: EventType) {
-    this._type = newType;
-  }
-
-  get updatedAt(): Date {
-    return this._updatedAt;
-  }
-  set updatedAt(newDate: Date) {
-    const now = new Date();
-
-    if (newDate > now) {
-      throw new InvalidArgumentError(`updatedAt should be before now`);
+  set startedAt(newDate: Date) {
+    if (this.endedAt && newDate > this.endedAt) {
+      throw new InvalidArgumentError(`startedAt should not be after endedAt`);
     }
-    this._updatedAt = newDate;
+    this._startedAt = newDate;
   }
 
-  get createdAt(): Date {
-    return this._createdAt;
+  get endedAt(): Date | null {
+    return this._endedAt;
   }
-  set createdAt(newDate: Date) {
-    const now = new Date();
-
-    if (newDate > now) {
-      throw new InvalidArgumentError(`createdAt should be before now`);
+  set endedAt(newDate: Date | null) {
+    if (newDate && newDate < this.startedAt) {
+      throw new InvalidArgumentError(`endedAt should not be before startedAt`);
     }
-    this._createdAt = newDate;
+    this._endedAt = newDate;
   }
 }
