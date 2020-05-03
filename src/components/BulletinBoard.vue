@@ -1,6 +1,6 @@
 <template>
   <div class="root">
-    <h2>{{ runningTask.title }}</h2>
+    <h2>{{ runningTask.task.title }}</h2>
     <h3>
       {{ ellapsedTime.hours }}:{{
         `${ellapsedTime.minutes}`.padStart(2, "0")
