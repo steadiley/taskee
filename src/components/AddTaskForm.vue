@@ -25,7 +25,7 @@ const useAddForm = (emit: (event: string) => void) => {
   const submit = async () => {
     await taskStore.addTask({
       title: form.title,
-      dueDate: new Date(form.dueDate),
+      dueDate: form.dueDate === "" ? undefined : new Date(form.dueDate),
     });
     const initialFormState = createInitialFormState();
     form.title = initialFormState.title;
