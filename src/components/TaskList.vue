@@ -1,7 +1,7 @@
 <template>
   <ul>
     <li v-for="task in tasks" :key="task.id">
-      <TaskCard :task="task" />
+      <TaskCard :task="task" :runningTask="runningTask" />
     </li>
   </ul>
 </template>
@@ -18,6 +18,7 @@ const TaskList = defineComponent({
   },
   props: {
     tasks: Array,
+    runningTask: Object,
   },
 });
 export default TaskList;
