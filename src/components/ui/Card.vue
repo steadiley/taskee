@@ -52,7 +52,11 @@ export default Card;
     color: $green;
     opacity: 0.5;
   }
-  &.dark {
+}
+
+// darkmode
+.dark {
+  .card {
     border-color: $darkmode-white-op5;
     color: $darkmode-white-op7;
     background-color: $darkmode-black;
