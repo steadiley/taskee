@@ -14,7 +14,7 @@ import { useTaskStore } from "../composables/use_store";
 
 interface Props {
   task: Task;
-  runningTask: Task;
+  runningTask: { task: Task; startedAt: Date };
 }
 
 export const useTimer = (taskId: string) => {
@@ -40,7 +40,7 @@ const TaskCard = defineComponent({
   setup(props: Props) {
     const { toggleTimer } = useTimer(props.task.id);
     const isRunning = computed(() => {
-      return props.runningTask && props.task.id === props.runningTask.id;
+      return props.runningTask && props.task.id === props.runningTask.task.id;
     });
     return {
       toggleTimer,

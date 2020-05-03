@@ -88,14 +88,19 @@ export class TaskStore extends VuexModule {
     return this.taskEvents.find((event) => !event.endedAt);
   }
 
-  get runningTask(): Task | null {
+  get runningTask(): { task: Task; startedAt: Date } | null {
     const maybeIncompleteTaskEvent = this.incompleteTaskEvent;
     if (!maybeIncompleteTaskEvent) {
       return null;
     }
-    return (
-      this.tasks.find((task) => task.id === maybeIncompleteTaskEvent.taskId) ||
-      null
+    const task = this.tasks.find(
+      (task) => task.id === maybeIncompleteTaskEvent.taskId
     );
+    return task
+      ? {
+          task,
+          startedAt: maybeIncompleteTaskEvent.startedAt,
+        }
+      : null;
   }
 }

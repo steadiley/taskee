@@ -2,9 +2,9 @@
   <div class="root">
     <h2>{{ runningTask.title }}</h2>
     <h3>
-      {{ ellapsedTime.hours }}:{{ ellapsedTime.minutes }}:{{
-        ellapsedTime.seconds
-      }}
+      {{ ellapsedTime.hours }}:{{
+        `${ellapsedTime.minutes}`.padStart(2, "0")
+      }}:{{ `${ellapsedTime.seconds}`.padStart(2, "0") }}
     </h3>
     <button @click="stopTimer">STOP</button>
   </div>
@@ -12,31 +12,40 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, reactive } from "@vue/composition-api";
+
+import { Task } from "@/domain/entity";
 import { useTaskStore } from "../composables/use_store";
 
 interface Props {
-  startedAt: Date;
+  runningTask: { task: Task; startedAt: Date };
 }
+
+const calcEllapsedTime = (
+  now: Date,
+  start: Date
+): { hours: number; minutes: number; seconds: number } => {
+  const ellapsedMillisec = new Date().getTime() - start.getTime();
+  const hours = Math.floor(ellapsedMillisec / (60 * 60 * 1000));
+  const minutes = Math.floor(ellapsedMillisec / (60 * 1000)) % 60;
+  const seconds = Math.floor(ellapsedMillisec / 1000) % 60;
+  return {
+    hours,
+    minutes,
+    seconds,
+  };
+};
 
 const useEllapsedTime = (
   startedAt: Date
 ): { hours: number; minutes: number; seconds: number } => {
-  const ellapsedTime = reactive<{
-    hours: number;
-    minutes: number;
-    seconds: number;
-  }>({
-    hours: 0,
-    minutes: 0,
-    seconds: 0,
-  });
+  const ellapsedTime = reactive(calcEllapsedTime(new Date(), startedAt));
 
   onMounted(() => {
     setInterval(() => {
-      const ellapsedMillisec = new Date().getTime() - startedAt.getTime();
-      ellapsedTime.hours = Math.floor(ellapsedMillisec / (60 * 60 * 1000));
-      ellapsedTime.minutes = Math.floor(ellapsedMillisec / (60 * 1000)) % 60;
-      ellapsedTime.seconds = Math.floor(ellapsedMillisec / 1000) % 60;
+      const newEllapsedTime = calcEllapsedTime(new Date(), startedAt);
+      ellapsedTime.hours = newEllapsedTime.hours;
+      ellapsedTime.minutes = newEllapsedTime.minutes;
+      ellapsedTime.seconds = newEllapsedTime.seconds;
     }, 1000);
   });
   return ellapsedTime;
@@ -54,10 +63,9 @@ const BulletinBoard = defineComponent({
   name: "BulletinBoard",
   props: {
     runningTask: Object,
-    startedAt: Date,
   },
   setup(props: Props) {
-    const ellapsedTime = useEllapsedTime(props.startedAt);
+    const ellapsedTime = useEllapsedTime(props.runningTask.startedAt);
     const stopTimer = useStopTimer();
     return { ellapsedTime, stopTimer };
   },
