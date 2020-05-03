@@ -50,8 +50,8 @@ const useStopTimer = () => {
   return stopTimer;
 };
 
-const TaskList = defineComponent({
-  name: "TaskList",
+const BulletinBoard = defineComponent({
+  name: "BulletinBoard",
   props: {
     runningTask: Object,
     startedAt: Date,
@@ -62,7 +62,7 @@ const TaskList = defineComponent({
     return { ellapsedTime, stopTimer };
   },
 });
-export default TaskList;
+export default BulletinBoard;
 </script>
 
 <style scoped lang="scss">
