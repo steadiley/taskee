@@ -11,7 +11,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, reactive } from "@vue/composition-api";
+import {
+  defineComponent,
+  onMounted,
+  reactive,
+  onUnmounted,
+} from "@vue/composition-api";
 
 import { Task } from "@/domain/entity";
 import { useTaskStore } from "../composables/use_store";
@@ -39,14 +44,18 @@ const useEllapsedTime = (
   startedAt: Date
 ): { hours: number; minutes: number; seconds: number } => {
   const ellapsedTime = reactive(calcEllapsedTime(new Date(), startedAt));
+  let timer: number;
 
   onMounted(() => {
-    setInterval(() => {
+    timer = setInterval(() => {
       const newEllapsedTime = calcEllapsedTime(new Date(), startedAt);
       ellapsedTime.hours = newEllapsedTime.hours;
       ellapsedTime.minutes = newEllapsedTime.minutes;
       ellapsedTime.seconds = newEllapsedTime.seconds;
     }, 1000);
+  });
+  onUnmounted(() => {
+    clearInterval(timer);
   });
   return ellapsedTime;
 };
