@@ -103,4 +103,13 @@ export class TaskStore extends VuexModule {
         }
       : null;
   }
+
+  get calcTotalTimeSpentById() {
+    return (taskId: string) => {
+      return this.taskEvents
+        .filter((event) => event.taskId === taskId && event.isEnded)
+        .map((event) => event.duration)
+        .reduce((a, b) => a + b, 0);
+    };
+  }
 }
