@@ -23,7 +23,7 @@ export const initializeFirebaseAuth = (
 ) => {
   firebase.auth().onAuthStateChanged(async (user) => {
     if (user) {
-      userStore.login(user.uid, user.email);
+      userStore.login({ userId: user.uid, email: user.email });
       await taskStore.fetchInitData();
 
       router.push("/").catch(() => {

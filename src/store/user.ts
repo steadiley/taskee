@@ -21,7 +21,7 @@ export class UserStore extends VuexModule {
   }
 
   @Action
-  login(userId: string, email: string | null) {
+  login({ userId, email }: { userId: string; email: string | null }) {
     this.setUserId(userId);
     this.setEmail(email);
   }

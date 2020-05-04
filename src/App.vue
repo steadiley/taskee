@@ -30,6 +30,7 @@ const App = defineComponent({
     const userStore = useUserStore();
     const taskStore = useTaskStore();
     initializeFirebaseAuth(userStore, taskStore);
+
     const email = computed(() => userStore.email);
     const isLoggedIn = computed(() => userStore.isLoggedIn);
 
