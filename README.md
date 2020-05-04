@@ -44,6 +44,12 @@ yarn test:e2e
 yarn lint
 ```
 
+- firebase store のルールをデプロイする (いずれ自動化したい)
+
+```
+firebase deploy --only firestore:rules
+```
+
 # 使用技術
 
 - Vue2 + composition-api(with Typescript)
