@@ -44,6 +44,37 @@ yarn test:e2e
 yarn lint
 ```
 
+# SCSSの構成
+
+ - ブラウザごと特有の挙動を統一するための記述
+
+ ```
+initialize.scss , normalize.scss
+ ```
+- アプリごとの基礎スタイルを記述
+
+```
+base.scss
+```
+
+- 定数ファイル(配色やトーン&統一用の記述)
+
+```
+variables.scss
+```
+
+- スタイル微調整用モジュール
+
+```
+extend.scss
+```
+
+- 共通のクエリを記述
+
+```
+mixins.scss
+```
+
 # 使用技術
 
 - Vue2 + composition-api(with Typescript)
