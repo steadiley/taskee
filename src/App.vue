@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <UiContainer mode="dark">
+    <UiContainer>
       <div id="nav">
         <router-link to="/">Home</router-link>
       </div>

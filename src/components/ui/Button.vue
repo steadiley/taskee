@@ -67,6 +67,7 @@ $small: 4px 10px;
   position: relative;
   z-index: 1;
   overflow: hidden;
+  color: $white;
   &.large {
     padding: $large;
   }
