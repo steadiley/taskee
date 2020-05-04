@@ -3,6 +3,7 @@ import "firebase/firestore";
 
 import router from "@/router";
 import { UserStore } from "@/store/user";
+import { TaskStore } from "@/store/task";
 
 const firebaseConfig = {
   apiKey: process.env.VUE_APP_FIREBASE_API_KEY,
@@ -16,11 +17,15 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 
-export const initializeFirebaseAuth = (userStore: UserStore) => {
-  firebase.auth().onAuthStateChanged((user) => {
+export const initializeFirebaseAuth = (
+  userStore: UserStore,
+  taskStore: TaskStore
+) => {
+  firebase.auth().onAuthStateChanged(async (user) => {
     if (user) {
-      userStore.setUserId(user.uid);
-      userStore.setEmail(user.email);
+      userStore.login(user.uid, user.email);
+      await taskStore.fetchInitData();
+
       router.push("/").catch(() => {
         /* ignoring duplicate navigation error*/
       });

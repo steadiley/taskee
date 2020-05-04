@@ -13,12 +13,12 @@
 
 <script lang="ts">
 import firebase from "firebase";
-import { defineComponent, onMounted, computed } from "@vue/composition-api";
+import { defineComponent, computed } from "@vue/composition-api";
 
 import {
   provideStore,
-  useTaskStore,
   useUserStore,
+  useTaskStore,
 } from "./composables/use_store";
 import { initializeFirebaseAuth } from "@/lib/firebase";
 
@@ -27,16 +27,9 @@ const App = defineComponent({
   setup(_, { root: { $store } }) {
     provideStore($store);
 
-    const taskStore = useTaskStore();
-    onMounted(async () => {
-      await Promise.all([
-        taskStore.fetchTodaysTasks(),
-        taskStore.fetchTaskEvents(),
-      ]);
-    });
-
     const userStore = useUserStore();
-    initializeFirebaseAuth(userStore);
+    const taskStore = useTaskStore();
+    initializeFirebaseAuth(userStore, taskStore);
     const email = computed(() => userStore.email);
     const isLoggedIn = computed(() => userStore.isLoggedIn);
 

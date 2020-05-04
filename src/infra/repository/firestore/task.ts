@@ -67,6 +67,8 @@ export class FirestoreTaskRepository implements TaskRepository {
       title: task.title,
       dueDate: task.dueDate,
       finishdedAt: task.finishedAt,
+      createdAt: task.createdAt,
+      updatedAt: task.updatedAt,
     };
   }
 
@@ -77,11 +79,14 @@ export class FirestoreTaskRepository implements TaskRepository {
       data.id,
       data.title,
       data.dueDate ? data.dueDate.toDate() : null,
-      data.finishedAt ? data.finishdedAt.toDate() : null
+      data.finishedAt ? data.finishdedAt.toDate() : null,
+      data.createdAt ? data.createdAt.toDate() : null,
+      data.updatedAt ? data.updatedAt.toDate() : null
     );
   }
 
-  private getTasksRef(userId: string) {
+  private getTasksRef(userId: string | null) {
+    assertIsDefined(userId);
     return this.db.collection(`users/${userId}/tasks`);
   }
 }

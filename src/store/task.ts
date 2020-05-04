@@ -3,14 +3,13 @@ import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
 import { Task, TaskEvent } from "@/domain/entity";
 import { TaskUsecase } from "@/app";
 import { lazyInject } from "@/app_context";
-import { RootState } from ".";
 
 export interface TaskState {
   tasks: Task[];
 }
 
 @Module({ name: "task" })
-export class TaskStore extends VuexModule<TaskState, RootState> {
+export class TaskStore extends VuexModule {
   tasks: Task[] = [];
   taskEvents: TaskEvent[] = [];
 
@@ -44,6 +43,12 @@ export class TaskStore extends VuexModule<TaskState, RootState> {
       taskEvent,
       ...this.taskEvents.slice(index + 1),
     ];
+  }
+
+  @Action
+  async fetchInitData() {
+    await this.fetchTodaysTasks();
+    await this.fetchTaskEvents();
   }
 
   @Action

@@ -49,7 +49,8 @@ export class FirestoreTaskEventRepository implements TaskEventRepository {
     );
   }
 
-  private getTaskEventsRef(userId: string) {
+  private getTaskEventsRef(userId: string | null) {
+    assertIsDefined(userId);
     return this.db.collection(`users/${userId}/task_events`);
   }
 }

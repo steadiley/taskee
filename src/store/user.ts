@@ -1,5 +1,4 @@
 import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
-import { RootState } from ".";
 
 export interface UserState {
   userId: string;
@@ -7,7 +6,7 @@ export interface UserState {
 }
 
 @Module({ name: "user" })
-export class UserStore extends VuexModule<UserState, RootState> {
+export class UserStore extends VuexModule {
   userId: string | null = null;
   email: string | null = null;
 
@@ -19,6 +18,12 @@ export class UserStore extends VuexModule<UserState, RootState> {
   @Mutation
   setEmail(email: string | null) {
     this.email = email;
+  }
+
+  @Action
+  login(userId: string, email: string | null) {
+    this.setUserId(userId);
+    this.setEmail(email);
   }
 
   @Action

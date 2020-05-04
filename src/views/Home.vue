@@ -34,6 +34,7 @@ const Home = defineComponent({
   },
   setup() {
     const taskStore = useTaskStore();
+
     const shouldShowAddForm = ref(false);
     const showAddForm = () => {
       shouldShowAddForm.value = true;
