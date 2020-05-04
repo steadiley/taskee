@@ -1,6 +1,7 @@
 <template>
   <div class="task">
     <div>{{ task.title }}</div>
+    <div>Total: {{ totalTimeSpent }} minutes</div>
     <button @click="toggleTimer(isRunning)">
       {{ isRunning ? "STOP" : "START" }}
     </button>
@@ -14,7 +15,7 @@ import { useTaskStore } from "../composables/use_store";
 
 interface Props {
   task: Task;
-  runningTask: Task;
+  runningTask: { task: Task; startedAt: Date };
 }
 
 export const useTimer = (taskId: string) => {
@@ -40,11 +41,17 @@ const TaskCard = defineComponent({
   setup(props: Props) {
     const { toggleTimer } = useTimer(props.task.id);
     const isRunning = computed(() => {
-      return props.runningTask && props.task.id === props.runningTask.id;
+      return props.runningTask && props.task.id === props.runningTask.task.id;
+    });
+    const taskStore = useTaskStore();
+    const totalTimeSpent = computed(() => {
+      const totalMillisec = taskStore.calcTotalTimeSpentById(props.task.id);
+      return Math.floor(totalMillisec / (60 * 1000));
     });
     return {
       toggleTimer,
       isRunning,
+      totalTimeSpent,
     };
   },
 });
