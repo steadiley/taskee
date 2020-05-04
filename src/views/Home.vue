@@ -14,7 +14,7 @@
       </UiCol>
     </UiRow>
     <template v-else>
-      <AddTaskButton @click="addClickEvent" />
+      <AddTaskButton @click="showAddForm" />
     </template>
   </div>
 </template>
@@ -45,7 +45,7 @@ const Home = defineComponent({
   setup() {
     const taskStore = useTaskStore();
     const shouldShowAddForm = ref(false);
-    const addClickEvent = () => {
+    const showAddForm = () => {
       shouldShowAddForm.value = true;
     };
     const hideAddForm = () => {
@@ -57,7 +57,7 @@ const Home = defineComponent({
     });
     return {
       shouldShowAddForm,
-      addClickEvent,
+      showAddForm,
       hideAddForm,
       tasks,
       runningTask,

@@ -16,16 +16,18 @@ const Card = defineComponent({
   name: "Card",
   components: {},
   props: {
-    state: { type: String, defalut: "" },
-    mode: { type: String, defalut: "" },
+    state: { type: String, default: "" },
+    mode: { type: String, default: "" },
   },
   setup: (props: Props) => {
-    const addState =
+    const addState = computed(() =>
       props.state === "active" || props.state === "disabled"
-        ? computed(() => `${props.state}`)
-        : "";
-    const colorMode =
-      props.mode === "dark" ? computed(() => `${props.mode}`) : "";
+        ? `${props.state}`
+        : ""
+    );
+    const colorMode = computed(() =>
+      props.mode === "dark" ? `${props.mode}` : ""
+    );
     return {
       addState,
       colorMode,

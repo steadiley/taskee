@@ -17,14 +17,16 @@ const Col = defineComponent({
   name: "Col",
   components: {},
   props: {
-    order: { type: String, defalut: "" },
-    cols: { type: String, defalut: "" },
-    self: { type: String, defalut: "" },
+    order: { type: String, default: "" },
+    cols: { type: String, default: "" },
+    self: { type: String, default: "" },
   },
   setup: (props: Props) => {
-    const orderItem = props.order ? computed(() => `order-${props.order}`) : "";
-    const colsItem = props.cols ? computed(() => `cols-${props.cols}`) : "";
-    const selfItem = props.self ? computed(() => `self-${props.self}`) : "";
+    const orderItem = computed(() =>
+      props.order ? `order-${props.order}` : ""
+    );
+    const colsItem = computed(() => (props.cols ? `cols-${props.cols}` : ""));
+    const selfItem = computed(() => (props.self ? `self-${props.self}` : ""));
     return {
       orderItem,
       colsItem,

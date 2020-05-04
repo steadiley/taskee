@@ -17,20 +17,20 @@ const Row = defineComponent({
   name: "Row",
   components: {},
   props: {
-    justify: { type: String, defalut: "" },
-    align: { type: String, defalut: "" },
-    contents: { type: String, defalut: "" },
+    justify: { type: String, default: "" },
+    align: { type: String, default: "" },
+    contents: { type: String, default: "" },
   },
   setup: (props: Props) => {
-    const justifyContent = props.justify
-      ? computed(() => `justify-${props.justify}`)
-      : "";
-    const alignItems = props.align
-      ? computed(() => `align-${props.align}`)
-      : "";
-    const alignContents = props.contents
-      ? computed(() => `contents-${props.contents}`)
-      : "";
+    const justifyContent = computed(() =>
+      props.justify ? `justify-${props.justify}` : ""
+    );
+    const alignItems = computed(() =>
+      props.align ? `align-${props.align}` : ""
+    );
+    const alignContents = computed(() =>
+      props.contents ? `contents-${props.contents}` : ""
+    );
     return {
       justifyContent,
       alignItems,

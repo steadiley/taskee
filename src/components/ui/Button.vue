@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, SetupContext } from "@vue/composition-api";
+import { defineComponent, computed } from "@vue/composition-api";
 
 interface Props {
   color: string;
@@ -16,21 +16,15 @@ const Button = defineComponent({
   name: "Button",
   components: {},
   props: {
-    state: { type: String, defalut: "" },
-    size: { type: String, defalut: "" },
+    color: { type: String, default: "green" },
+    size: { type: String, default: "" },
   },
-  setup: (props: Props, context: SetupContext) => {
-    const buttonColor = props.color
-      ? computed(() => `${props.color}`)
-      : "green";
-    const buttonSize = props.size ? computed(() => `${props.size}`) : "";
-    const addClickEvent = () => {
-      context.emit("click");
-    };
+  setup: (props: Props) => {
+    const buttonColor = computed(() => `${props.color}`);
+    const buttonSize = computed(() => `${props.size}`);
     return {
       buttonColor,
       buttonSize,
-      addClickEvent,
     };
   },
 });

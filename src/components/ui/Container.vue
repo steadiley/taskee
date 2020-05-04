@@ -17,8 +17,9 @@ const Container = defineComponent({
     mode: { type: String, default: "" },
   },
   setup(props: Props) {
-    const colorMode =
-      props.mode === "dark" ? computed(() => `${props.mode}`) : "";
+    const colorMode = computed(() =>
+      props.mode === "dark" ? `${props.mode}` : ""
+    );
     return {
       colorMode,
     };
