@@ -6,11 +6,15 @@
       :startedAt="new Date()"
     />
     <TaskList :tasks="tasks" :runningTask="runningTask" />
-    <div v-if="shouldShowAddForm">
-      <AddTaskForm @cancel="hideAddForm" />
-    </div>
+    <UiRow v-if="shouldShowAddForm">
+      <UiCol>
+        <UiCard>
+          <AddTaskForm @cancel="hideAddForm" />
+        </UiCard>
+      </UiCol>
+    </UiRow>
     <template v-else>
-      <AddTaskButton @click="showAddForm" />
+      <AddTaskButton @click="addClickEvent" />
     </template>
   </div>
 </template>
@@ -23,6 +27,9 @@ import AddTaskButton from "@/components/AddTaskButton.vue";
 import TaskList from "@/components/TaskList.vue";
 import BulletinBoard from "@/components/BulletinBoard.vue";
 import { useTaskStore } from "@/composables/use_store";
+import UiRow from "@/components/ui/Row.vue";
+import UiCol from "@/components/ui/Col.vue";
+import UiCard from "@/components/ui/Card.vue";
 
 const Home = defineComponent({
   name: "Home",
@@ -31,11 +38,14 @@ const Home = defineComponent({
     AddTaskButton,
     BulletinBoard,
     TaskList,
+    UiRow,
+    UiCol,
+    UiCard,
   },
   setup() {
     const taskStore = useTaskStore();
     const shouldShowAddForm = ref(false);
-    const showAddForm = () => {
+    const addClickEvent = () => {
       shouldShowAddForm.value = true;
     };
     const hideAddForm = () => {
@@ -47,7 +57,7 @@ const Home = defineComponent({
     });
     return {
       shouldShowAddForm,
-      showAddForm,
+      addClickEvent,
       hideAddForm,
       tasks,
       runningTask,

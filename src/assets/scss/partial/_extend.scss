@@ -195,3 +195,23 @@ $floats: (
 .font-weight-bold {
   font-weight: bold;
 }
+
+$colors: (
+  "darkmode-black": $darkmode-black,
+  "darkmode-gray": $darkmode-gray,
+  "darkmode-green": $darkmode-green,
+  "darkmode-light-green": $darkmode-light-green,
+  "darkmode-red": $darkmode-red,
+  "light-gray": $light-gray,
+  "darken-gray": $darken-gray,
+  "darken-blue": $darken-blue,
+  "light-blue": $light-blue,
+  "orange": $orange,
+  "green": $green,
+  "red": $red
+);
+@each $type, $property in $colors {
+  .#{$type} {
+    background-color: $property;
+  }
+}

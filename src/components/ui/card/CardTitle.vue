@@ -1,5 +1,5 @@
 <template>
-  <div class="card-title fs-150 font-weight-bold">
+  <div class="card-title fs-160 font-weight-bold">
     <slot />
   </div>
 </template>

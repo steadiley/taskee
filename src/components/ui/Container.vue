@@ -33,7 +33,7 @@ export default Container;
   background-color: $background-color;
   &.dark {
     background-color: $darkmode-background-color;
-    color: $darkmode-white-op7;
+    color: $white-op7;
   }
 }
 </style>

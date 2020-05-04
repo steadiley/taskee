@@ -1,6 +1,5 @@
 <template>
   <div class="card" :class="[addState, colorMode]">
-    {{ addState }}
     <slot />
   </div>
 </template>
@@ -52,13 +51,26 @@ export default Card;
     color: $green;
     opacity: 0.5;
   }
+  &.dark {
+    background-color: $darkmode-black;
+    box-shadow: $darkmode-shadow-type-default;
+    &.active {
+      background-color: $darkmode-gray;
+    }
+    &.disabled {
+      border-color: $darkmode-green;
+      color: $darkmode-green;
+      background-color: transparent;
+      opacity: 0.5;
+    }
+  }
 }
 
 // darkmode
 .dark {
   .card {
-    border-color: $darkmode-white-op5;
-    color: $darkmode-white-op7;
+    border-color: $white-op5;
+    color: $white-op7;
     background-color: $darkmode-black;
     box-shadow: $darkmode-shadow-type-default;
     &.active {

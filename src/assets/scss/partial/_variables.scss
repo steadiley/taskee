@@ -10,14 +10,16 @@ $fs-p: 16px;
 // border
 $radius-size: 4px;
 
+//common-color
+$white-op5: rgba(255, 255, 255, .5);
+$white-op7: rgba(255, 255, 255, .7);
+$white-op8: rgba(255, 255, 255, .6);
+$white: #fff;
+
 //dark-mode-color
 $darkmode-background-color: #121212;
 $darkmode-black: #121212;
 $darkmode-gray: #2D2D2D;
-$darkmode-white: #fff;
-$darkmode-white-op5: rgba(255, 255, 255, .5);
-$darkmode-white-op7: rgba(255, 255, 255, .7);
-$darkmode-white-op8: rgba(255, 255, 255, .6);
 $darkmode-green:#179E8F;
 $darkmode-light-green:#24DAC5;
 $darkmode-red: #CF6679;
@@ -31,7 +33,6 @@ $darken-gray: #2D2D2D;
 $darken-blue: #304156;
 $light-blue: #F5F6FA;
 $orange: #FBB980;
-$white: #fff;
 $green:#34BFA3;
 $red: #CF6679;
 $place-holder-color: #ECECEC;
