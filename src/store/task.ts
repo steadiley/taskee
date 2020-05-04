@@ -46,20 +46,30 @@ export class TaskStore extends VuexModule {
   }
 
   @Action
+  async fetchInitData() {
+    await this.fetchTodaysTasks();
+    await this.fetchTaskEvents();
+  }
+
+  @Action
   async fetchTodaysTasks() {
-    const tasks = await this.taskUsecase.listTodaysTasks();
+    const tasks = await this.taskUsecase.listTodaysTasks(this.uid);
     this.setTasks(tasks);
   }
 
   @Action
   async addTask({ title, dueDate }: { title: string; dueDate?: Date }) {
-    const newTask = await this.taskUsecase.addTask({ title, dueDate });
+    const newTask = await this.taskUsecase.addTask(this.uid, {
+      title,
+      dueDate,
+    });
     this.setTasks(this.tasks.concat(newTask));
   }
 
   @Action
   async fetchTaskEvents() {
-    const taskEvents = await this.taskUsecase.listTaskEvents();
+    this.context.rootState.user;
+    const taskEvents = await this.taskUsecase.listTaskEvents(this.uid);
     this.setTaskEvents(taskEvents);
   }
 
@@ -69,6 +79,7 @@ export class TaskStore extends VuexModule {
     if (maybeIncompleteTaskEvent) {
       maybeIncompleteTaskEvent.endedAt = new Date();
       const updatedTaskEvent = await this.taskUsecase.updateTaskEvent(
+        this.uid,
         maybeIncompleteTaskEvent
       );
       this.updateTaskEvent(updatedTaskEvent);
@@ -78,7 +89,7 @@ export class TaskStore extends VuexModule {
   @Action
   async startTask(id: string) {
     await this.stopRunningTask();
-    const taskEvent = await this.taskUsecase.addTaskEvent({
+    const taskEvent = await this.taskUsecase.addTaskEvent(this.uid, {
       taskId: id,
     });
     this.addTaskEvent(taskEvent);
@@ -111,5 +122,9 @@ export class TaskStore extends VuexModule {
         .map((event) => event.duration)
         .reduce((a, b) => a + b, 0);
     };
+  }
+
+  get uid() {
+    return this.context.rootState.user.userId;
   }
 }

@@ -13,17 +13,17 @@ export class FirestoreTaskEventRepository implements TaskEventRepository {
     this.db = firestoreClient;
   }
 
-  async findAll(): Promise<TaskEvent[]> {
-    const { docs } = await this.getTaskEventsRef().limit(50).get();
+  async findAll(userId: string): Promise<TaskEvent[]> {
+    const { docs } = await this.getTaskEventsRef(userId).limit(50).get();
     return docs.map((doc) => this.fromDocToEntity(doc.data()));
   }
 
-  async add(taskEvent: TaskEvent): Promise<void> {
-    await this.update(taskEvent);
+  async add(userId: string, taskEvent: TaskEvent): Promise<void> {
+    await this.update(userId, taskEvent);
   }
 
-  async update(taskEvent: TaskEvent): Promise<void> {
-    await this.getTaskEventsRef()
+  async update(userId: string, taskEvent: TaskEvent): Promise<void> {
+    await this.getTaskEventsRef(userId)
       .doc(taskEvent.id)
       .set(this.toDocFromEntity(taskEvent));
   }
@@ -49,8 +49,8 @@ export class FirestoreTaskEventRepository implements TaskEventRepository {
     );
   }
 
-  private getTaskEventsRef() {
-    const userId = "taro"; // TODO: will be replaced by currently logged in user id
+  private getTaskEventsRef(userId: string | null) {
+    assertIsDefined(userId);
     return this.db.collection(`users/${userId}/task_events`);
   }
 }

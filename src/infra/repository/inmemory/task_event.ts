@@ -15,14 +15,14 @@ export class InmemoryTaskEventRepository implements TaskEventRepository {
     return allEvents;
   }
 
-  async add(taskEvent: TaskEvent): Promise<void> {
+  async add(userId: string, taskEvent: TaskEvent): Promise<void> {
     if (!this._eventMap.has(taskEvent.taskId)) {
       this._eventMap.set(taskEvent.taskId, []);
     }
     this._eventMap.get(taskEvent.taskId)?.push(taskEvent);
   }
 
-  async update(taskEvent: TaskEvent): Promise<void> {
+  async update(userId: string, taskEvent: TaskEvent): Promise<void> {
     if (!this._eventMap.has(taskEvent.taskId)) {
       throw new Error(`No task with ID ${taskEvent.taskId}`);
     }

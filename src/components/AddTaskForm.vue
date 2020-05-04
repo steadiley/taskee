@@ -1,9 +1,9 @@
 <template>
-  <form @submit="submit">
+  <form @submit.prevent="submit">
     <input class="title-text-box" v-model="form.title" required />
     <input class="due-date-text-box" v-model="form.dueDate" type="date" />
     <button type="submit">Add</button>
-    <button @click="hideAddForm">Cancel</button>
+    <button @click.prevent="hideAddForm">Cancel</button>
   </form>
 </template>
 

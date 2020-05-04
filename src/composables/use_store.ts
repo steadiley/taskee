@@ -3,6 +3,7 @@ import { inject, provide } from "@vue/composition-api";
 import { getModule } from "vuex-module-decorators";
 
 import { RootState } from "@/store";
+import { UserStore } from "@/store/user";
 import { TaskStore } from "@/store/task";
 
 const StoreSymbol = Symbol();
@@ -23,4 +24,10 @@ export function useTaskStore(): TaskStore {
   const store = useStore();
   const taskStore = getModule(TaskStore, store);
   return taskStore;
+}
+
+export function useUserStore(): UserStore {
+  const store = useStore();
+  const userStore = getModule(UserStore, store);
+  return userStore;
 }

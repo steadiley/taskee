@@ -1,18 +1,24 @@
 import { InvalidArgumentError } from "@/errors";
 
 export class Task {
-  private _updatedAt: Date;
-  private _createdAt: Date;
+  private _updatedAt!: Date;
+  private _createdAt!: Date;
 
   constructor(
     private _id: string,
     private _title: string,
     private _dueDate: Date | null = null,
-    private _finishdedAt: Date | null = null
+    private _finishdedAt: Date | null = null,
+    _updatedAt: Date | null = null,
+    _createdAt: Date | null = null
   ) {
     const now = new Date();
-    this._updatedAt = now;
-    this._createdAt = now;
+    if (!_updatedAt) {
+      this._updatedAt = now;
+    }
+    if (!_createdAt) {
+      this._createdAt = now;
+    }
   }
 
   get id() {

@@ -16,12 +16,15 @@ interface AddTaskEventCommand {
 }
 
 export interface TaskUsecase {
-  listTodaysTasks(): Promise<Task[]>;
-  listBacklogTasks(): Promise<Task[]>;
-  listTaskEvents(): Promise<TaskEvent[]>;
-  addTask(addTaskCommand: AddTaskCommand): Promise<Task>;
-  addTaskEvent(addTaskEventCommand: AddTaskEventCommand): Promise<TaskEvent>;
-  updateTaskEvent(taskEvent: TaskEvent): Promise<TaskEvent>;
+  listTodaysTasks(userId: string): Promise<Task[]>;
+  listBacklogTasks(userId: string): Promise<Task[]>;
+  listTaskEvents(userId: string): Promise<TaskEvent[]>;
+  addTask(userId: string, addTaskCommand: AddTaskCommand): Promise<Task>;
+  addTaskEvent(
+    userId: string,
+    addTaskEventCommand: AddTaskEventCommand
+  ): Promise<TaskEvent>;
+  updateTaskEvent(userId: string, taskEvent: TaskEvent): Promise<TaskEvent>;
 }
 
 @injectable()
@@ -32,42 +35,52 @@ export class AppTaskUsecase implements TaskUsecase {
     private taskEventRepository: TaskEventRepository
   ) {}
 
-  async listTodaysTasks(): Promise<Task[]> {
+  async listTodaysTasks(userId: string): Promise<Task[]> {
     const now = dayjs(); // TODO: deal with timezone setting of user
     const startOfDay = now.startOf("day").toDate();
     const endOfDay = now.endOf("day").toDate();
 
     const tasks = await this.taskRepository.getTasksByDateRange(
+      userId,
       startOfDay,
       endOfDay
     );
     return tasks;
   }
 
-  async listBacklogTasks(): Promise<Task[]> {
-    const tasks = await this.taskRepository.getTasksWithNoDueDate();
+  async listBacklogTasks(userId: string): Promise<Task[]> {
+    const tasks = await this.taskRepository.getTasksWithNoDueDate(userId);
     return tasks;
   }
 
-  async addTask({ title, dueDate }: AddTaskCommand): Promise<Task> {
+  async addTask(
+    userId: string,
+    { title, dueDate }: AddTaskCommand
+  ): Promise<Task> {
     const task = TaskFactory.createTask(title, dueDate);
-    await this.taskRepository.addTask(task);
+    await this.taskRepository.addTask(userId, task);
     return task;
   }
 
-  async addTaskEvent({ taskId }: AddTaskEventCommand): Promise<TaskEvent> {
+  async addTaskEvent(
+    userId: string,
+    { taskId }: AddTaskEventCommand
+  ): Promise<TaskEvent> {
     const taskEvent = new TaskEvent(cuid(), taskId, new Date());
-    await this.taskEventRepository.add(taskEvent);
+    await this.taskEventRepository.add(userId, taskEvent);
     return taskEvent;
   }
 
-  async updateTaskEvent(taskEvent: TaskEvent): Promise<TaskEvent> {
-    await this.taskEventRepository.update(taskEvent);
+  async updateTaskEvent(
+    userId: string,
+    taskEvent: TaskEvent
+  ): Promise<TaskEvent> {
+    await this.taskEventRepository.update(userId, taskEvent);
     return taskEvent;
   }
 
-  async listTaskEvents(): Promise<TaskEvent[]> {
-    const taskEvents = await this.taskEventRepository.findAll();
+  async listTaskEvents(userId: string): Promise<TaskEvent[]> {
+    const taskEvents = await this.taskEventRepository.findAll(userId);
     return taskEvents;
   }
 }
