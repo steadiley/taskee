@@ -2,15 +2,25 @@
   <div id="app">
     <div id="nav">
       <router-link to="/">Home</router-link>
+      <div v-if="isLoggedIn">
+        <div>Signed in as {{ email }}</div>
+        <button @click="logout">Logout</button>
+      </div>
     </div>
     <router-view />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted } from "@vue/composition-api";
+import firebase from "firebase";
+import { defineComponent, onMounted, computed } from "@vue/composition-api";
 
-import { provideStore, useTaskStore } from "./composables/use_store";
+import {
+  provideStore,
+  useTaskStore,
+  useUserStore,
+} from "./composables/use_store";
+import { initializeFirebaseAuth } from "@/lib/firebase";
 
 const App = defineComponent({
   name: "App",
@@ -24,6 +34,22 @@ const App = defineComponent({
         taskStore.fetchTaskEvents(),
       ]);
     });
+
+    const userStore = useUserStore();
+    initializeFirebaseAuth(userStore);
+    const email = computed(() => userStore.email);
+    const isLoggedIn = computed(() => userStore.isLoggedIn);
+
+    const logout = async () => {
+      await firebase.auth().signOut();
+      userStore.logout();
+    };
+
+    return {
+      email,
+      isLoggedIn,
+      logout,
+    };
   },
 });
 export default App;

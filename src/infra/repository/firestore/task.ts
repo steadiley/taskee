@@ -14,8 +14,12 @@ export class FirestoreTaskRepository implements TaskRepository {
     this.db = firestoreClient;
   }
 
-  async getTasksByDateRange(from: Date, to?: Date): Promise<Task[]> {
-    let query = this.getTasksRef().where("dueDate", ">=", from);
+  async getTasksByDateRange(
+    userId: string,
+    from: Date,
+    to?: Date
+  ): Promise<Task[]> {
+    let query = this.getTasksRef(userId).where("dueDate", ">=", from);
 
     if (to) {
       query = query.where("dueDate", "<=", to);
@@ -30,8 +34,10 @@ export class FirestoreTaskRepository implements TaskRepository {
     return tasks;
   }
 
-  async getTasksWithNoDueDate(): Promise<Task[]> {
-    const result = await this.getTasksRef().where("dueDate", "==", null).get();
+  async getTasksWithNoDueDate(userId: string): Promise<Task[]> {
+    const result = await this.getTasksRef(userId)
+      .where("dueDate", "==", null)
+      .get();
 
     const tasks = result.docs.map((doc) => {
       const data: firestore.DocumentData = doc.data();
@@ -40,12 +46,14 @@ export class FirestoreTaskRepository implements TaskRepository {
     return tasks;
   }
 
-  async addTask(task: Task): Promise<void> {
-    await this.getTasksRef().doc(task.id).set(this.toTaskDocFromEntity(task));
+  async addTask(userId: string, task: Task): Promise<void> {
+    await this.getTasksRef(userId)
+      .doc(task.id)
+      .set(this.toTaskDocFromEntity(task));
   }
 
-  async getTaskById(id: string): Promise<Task | null> {
-    const result = await this.getTasksRef().doc(id).get();
+  async getTaskById(userId: string, id: string): Promise<Task | null> {
+    const result = await this.getTasksRef(userId).doc(id).get();
     const data = result.data();
     if (!data) {
       return null;
@@ -73,8 +81,7 @@ export class FirestoreTaskRepository implements TaskRepository {
     );
   }
 
-  private getTasksRef() {
-    const userId = "taro"; // TODO: will be replaced by currently logged in user id
+  private getTasksRef(userId: string) {
     return this.db.collection(`users/${userId}/tasks`);
   }
 }

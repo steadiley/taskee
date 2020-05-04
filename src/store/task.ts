@@ -3,13 +3,14 @@ import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
 import { Task, TaskEvent } from "@/domain/entity";
 import { TaskUsecase } from "@/app";
 import { lazyInject } from "@/app_context";
+import { RootState } from ".";
 
 export interface TaskState {
   tasks: Task[];
 }
 
 @Module({ name: "task" })
-export class TaskStore extends VuexModule {
+export class TaskStore extends VuexModule<TaskState, RootState> {
   tasks: Task[] = [];
   taskEvents: TaskEvent[] = [];
 
@@ -47,19 +48,23 @@ export class TaskStore extends VuexModule {
 
   @Action
   async fetchTodaysTasks() {
-    const tasks = await this.taskUsecase.listTodaysTasks();
+    const tasks = await this.taskUsecase.listTodaysTasks(this.uid);
     this.setTasks(tasks);
   }
 
   @Action
   async addTask({ title, dueDate }: { title: string; dueDate?: Date }) {
-    const newTask = await this.taskUsecase.addTask({ title, dueDate });
+    const newTask = await this.taskUsecase.addTask(this.uid, {
+      title,
+      dueDate,
+    });
     this.setTasks(this.tasks.concat(newTask));
   }
 
   @Action
   async fetchTaskEvents() {
-    const taskEvents = await this.taskUsecase.listTaskEvents();
+    this.context.rootState.user;
+    const taskEvents = await this.taskUsecase.listTaskEvents(this.uid);
     this.setTaskEvents(taskEvents);
   }
 
@@ -69,6 +74,7 @@ export class TaskStore extends VuexModule {
     if (maybeIncompleteTaskEvent) {
       maybeIncompleteTaskEvent.endedAt = new Date();
       const updatedTaskEvent = await this.taskUsecase.updateTaskEvent(
+        this.uid,
         maybeIncompleteTaskEvent
       );
       this.updateTaskEvent(updatedTaskEvent);
@@ -78,7 +84,7 @@ export class TaskStore extends VuexModule {
   @Action
   async startTask(id: string) {
     await this.stopRunningTask();
-    const taskEvent = await this.taskUsecase.addTaskEvent({
+    const taskEvent = await this.taskUsecase.addTaskEvent(this.uid, {
       taskId: id,
     });
     this.addTaskEvent(taskEvent);
@@ -97,5 +103,9 @@ export class TaskStore extends VuexModule {
       this.tasks.find((task) => task.id === maybeIncompleteTaskEvent.taskId) ||
       null
     );
+  }
+
+  get uid() {
+    return this.context.rootState.user.userId;
   }
 }

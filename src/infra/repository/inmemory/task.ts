@@ -17,7 +17,11 @@ export class InmemoryTaskRepository implements TaskRepository {
     }
   }
 
-  async getTasksByDateRange(from: Date, to: Date): Promise<Task[]> {
+  async getTasksByDateRange(
+    userId: string,
+    from: Date,
+    to: Date
+  ): Promise<Task[]> {
     return this._tasks.filter(
       (task) => task.dueDate && task.dueDate >= from && task.dueDate <= to
     );
@@ -27,7 +31,7 @@ export class InmemoryTaskRepository implements TaskRepository {
     return this._tasks.filter((task) => !task.dueDate);
   }
 
-  async addTask(task: Task): Promise<void> {
+  async addTask(userId: string, task: Task): Promise<void> {
     this._tasks.concat(task);
   }
 
