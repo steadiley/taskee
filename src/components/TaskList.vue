@@ -1,7 +1,7 @@
 <template>
   <UiRow>
     <UiCol v-for="task in tasks" :key="task.id" cols="10">
-      <UiCard>
+      <UiCard :task="task" :runningTask="runningTask">
         <UiCardSubTitle>{{ task.title }}</UiCardSubTitle>
       </UiCard>
     </UiCol>
@@ -25,6 +25,7 @@ const TaskList = defineComponent({
   },
   props: {
     tasks: Array,
+    runningTask: Object,
   },
 });
 export default TaskList;

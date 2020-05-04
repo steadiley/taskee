@@ -1,8 +1,9 @@
 import dayjs from "dayjs";
 import cuid from "cuid";
 
-import { Task } from "@/domain/entity";
-import { TaskRepository } from "@/domain/repository";
+import { Task, TaskEvent } from "@/domain/entity";
+import { TaskFactory } from "@/domain/factory";
+import { TaskRepository, TaskEventRepository } from "@/domain/repository";
 import { injectable, inject } from "inversify";
 
 interface AddTaskCommand {
@@ -10,16 +11,25 @@ interface AddTaskCommand {
   dueDate?: Date;
 }
 
+interface AddTaskEventCommand {
+  taskId: string;
+}
+
 export interface TaskUsecase {
   listTodaysTasks(): Promise<Task[]>;
   listBacklogTasks(): Promise<Task[]>;
+  listTaskEvents(): Promise<TaskEvent[]>;
   addTask(addTaskCommand: AddTaskCommand): Promise<Task>;
+  addTaskEvent(addTaskEventCommand: AddTaskEventCommand): Promise<TaskEvent>;
+  updateTaskEvent(taskEvent: TaskEvent): Promise<TaskEvent>;
 }
 
 @injectable()
 export class AppTaskUsecase implements TaskUsecase {
   constructor(
-    @inject("TaskRepository") private taskRepository: TaskRepository
+    @inject("TaskRepository") private taskRepository: TaskRepository,
+    @inject("TaskEventRepository")
+    private taskEventRepository: TaskEventRepository
   ) {}
 
   async listTodaysTasks(): Promise<Task[]> {
@@ -40,9 +50,24 @@ export class AppTaskUsecase implements TaskUsecase {
   }
 
   async addTask({ title, dueDate }: AddTaskCommand): Promise<Task> {
-    const id = cuid();
-    const task = new Task(id, title, dueDate);
+    const task = TaskFactory.createTask(title, dueDate);
     await this.taskRepository.addTask(task);
     return task;
+  }
+
+  async addTaskEvent({ taskId }: AddTaskEventCommand): Promise<TaskEvent> {
+    const taskEvent = new TaskEvent(cuid(), taskId, new Date());
+    await this.taskEventRepository.add(taskEvent);
+    return taskEvent;
+  }
+
+  async updateTaskEvent(taskEvent: TaskEvent): Promise<TaskEvent> {
+    await this.taskEventRepository.update(taskEvent);
+    return taskEvent;
+  }
+
+  async listTaskEvents(): Promise<TaskEvent[]> {
+    const taskEvents = await this.taskEventRepository.findAll();
+    return taskEvents;
   }
 }

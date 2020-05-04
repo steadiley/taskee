@@ -6,7 +6,7 @@ export interface TaskRepository {
    * @param from start of period
    * @param to end of period
    */
-  getTasksByDateRange(from: Date, to: Date): Promise<Task[]>;
+  getTasksByDateRange(from: Date, to?: Date): Promise<Task[]>;
 
   /**
    * Get tasks with no due date
@@ -18,4 +18,10 @@ export interface TaskRepository {
    * @param task a task to add
    */
   addTask(task: Task): Promise<void>;
+
+  /**
+   *
+   * @param id task id for which to fetch corresponding task. returns null if not found.
+   */
+  getTaskById(id: string): Promise<Task | null>;
 }

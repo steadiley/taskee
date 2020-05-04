@@ -1,6 +1,11 @@
 <template>
   <div class="home">
-    <TaskList :tasks="tasks" />
+    <BulletinBoard
+      v-if="runningTask"
+      :runningTask="runningTask"
+      :startedAt="new Date()"
+    />
+    <TaskList :tasks="tasks" :runningTask="runningTask" />
     <div v-if="shouldShowAddForm">
       <AddTaskForm @cancel="hideAddForm" />
     </div>
@@ -16,6 +21,7 @@ import { defineComponent, computed, ref } from "@vue/composition-api";
 import AddTaskForm from "@/components/AddTaskForm.vue";
 import AddTaskButton from "@/components/AddTaskButton.vue";
 import TaskList from "@/components/TaskList.vue";
+import BulletinBoard from "@/components/BulletinBoard.vue";
 import { useTaskStore } from "@/composables/use_store";
 
 const Home = defineComponent({
@@ -23,6 +29,7 @@ const Home = defineComponent({
   components: {
     AddTaskForm,
     AddTaskButton,
+    BulletinBoard,
     TaskList,
   },
   setup() {
@@ -35,11 +42,15 @@ const Home = defineComponent({
       shouldShowAddForm.value = false;
     };
     const tasks = computed(() => taskStore.tasks);
+    const runningTask = computed(() => {
+      return taskStore.runningTask;
+    });
     return {
       shouldShowAddForm,
       showAddForm,
       hideAddForm,
       tasks,
+      runningTask,
     };
   },
 });
