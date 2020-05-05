@@ -1,27 +1,19 @@
 <template>
-  <UiRow>
-    <UiCol v-for="task in tasks" :key="task.id" cols="10">
-      <UiCard :task="task" :runningTask="runningTask">
-        <UiCardSubTitle>{{ task.title }}</UiCardSubTitle>
-      </UiCard>
-    </UiCol>
-  </UiRow>
+  <ul>
+    <li v-for="task in tasks" :key="task.id">
+      <TaskCard :task="task" :runningTask="runningTask" />
+    </li>
+  </ul>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "@vue/composition-api";
-import UiRow from "@/components/ui/Row.vue";
-import UiCol from "@/components/ui/Col.vue";
-import UiCard from "@/components/ui/Card.vue";
-import UiCardSubTitle from "@/components/ui/card/CardSubTitle.vue";
+import TaskCard from "@/components/TaskCard.vue";
 
 const TaskList = defineComponent({
   name: "TaskList",
   components: {
-    UiRow,
-    UiCol,
-    UiCard,
-    UiCardSubTitle,
+    TaskCard,
   },
   props: {
     tasks: Array,

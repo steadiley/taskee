@@ -1,5 +1,5 @@
 <template>
-  <div class="task">
+  <div>
     <div>{{ task.title }}</div>
     <div>Total: {{ totalTimeSpent }} minutes</div>
     <button @click="toggleTimer(isRunning)">
@@ -12,6 +12,7 @@
 import { defineComponent, computed } from "@vue/composition-api";
 import { Task } from "../domain/entity";
 import { useTaskStore } from "../composables/use_store";
+import UiCard from "@/components/ui/Card.vue";
 
 interface Props {
   task: Task;
@@ -34,6 +35,9 @@ export const useTimer = (taskId: string) => {
 
 const TaskCard = defineComponent({
   name: "TaskCard",
+  components: {
+    UiCard,
+  },
   props: {
     task: Object,
     runningTask: Object,

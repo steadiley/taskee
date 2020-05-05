@@ -1,5 +1,5 @@
 <template>
-  <UiButton @click.native="showAddForm"> + Add Task </UiButton>
+  <UiButton @click="showAddForm"> + Add Task </UiButton>
 </template>
 
 <script lang="ts">

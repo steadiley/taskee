@@ -1,5 +1,5 @@
 <template>
-  <div class="button" :class="[buttonColor, buttonSize]">
+  <div class="button" :class="[buttonColor, buttonSize]" @click="onClick">
     <slot />
   </div>
 </template>
@@ -19,12 +19,16 @@ const Button = defineComponent({
     color: { type: String, default: "green" },
     size: { type: String, default: "" },
   },
-  setup: (props: Props) => {
+  setup: (props: Props, { emit }) => {
     const buttonColor = computed(() => `${props.color}`);
     const buttonSize = computed(() => `${props.size}`);
+    const onClick = () => {
+      emit("click");
+    };
     return {
       buttonColor,
       buttonSize,
+      onClick,
     };
   },
 });
