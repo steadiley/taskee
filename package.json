@@ -8,7 +8,8 @@
     "test:unit": "NODE_ENV=test vue-cli-service test:unit",
     "test:e2e": "NODE_ENV=test vue-cli-service test:e2e --headless",
     "lint": "eslint --no-fix --ext .ts,.js,.vue --ignore-path .gitignore .",
-    "lint:fix": "vue-cli-service lint"
+    "lint:fix": "vue-cli-service lint",
+    "firestore": "firebase emulators:start --only firestore"
   },
   "husky": {
     "hooks": {
