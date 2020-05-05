@@ -1,10 +1,6 @@
 <template>
   <div class="home">
-    <BulletinBoard
-      v-if="runningTask"
-      :runningTask="runningTask"
-      :startedAt="new Date()"
-    />
+    <BulletinBoard v-if="runningTask" :runningTask="runningTask" />
     <TaskList :tasks="tasks" :runningTask="runningTask" />
     <UiRow v-if="shouldShowAddForm">
       <UiCol>
@@ -44,6 +40,7 @@ const Home = defineComponent({
   },
   setup() {
     const taskStore = useTaskStore();
+
     const shouldShowAddForm = ref(false);
     const showAddForm = () => {
       shouldShowAddForm.value = true;

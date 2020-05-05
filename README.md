@@ -75,6 +75,12 @@ extend.scss
 mixins.scss
 ```
 
+- firebase store のルールをデプロイする (いずれ自動化したい)
+
+```
+firebase deploy --only firestore:rules
+```
+
 # 使用技術
 
 - Vue2 + composition-api(with Typescript)

@@ -1,9 +1,9 @@
 <template>
-  <form @submit="submit">
+  <form @submit.prevent="submit">
     <input class="title-text-box" v-model="form.title" required />
     <input class="due-date-text-box" v-model="form.dueDate" type="date" />
     <button type="submit">Add</button>
-    <button @click="hideAddForm">Cancel</button>
+    <button @click.prevent="hideAddForm">Cancel</button>
   </form>
 </template>
 
@@ -25,7 +25,7 @@ const useAddForm = (emit: (event: string) => void) => {
   const submit = async () => {
     await taskStore.addTask({
       title: form.title,
-      dueDate: new Date(form.dueDate),
+      dueDate: form.dueDate === "" ? undefined : new Date(form.dueDate),
     });
     const initialFormState = createInitialFormState();
     form.title = initialFormState.title;

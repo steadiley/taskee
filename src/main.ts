@@ -4,6 +4,8 @@ import VueCompositionApi from "@vue/composition-api";
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
+import "firebaseui/dist/firebaseui.css";
+
 require("@/assets/scss/styles.scss");
 
 Vue.config.productionTip = false;
