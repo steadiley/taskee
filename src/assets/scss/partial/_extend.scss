@@ -9,7 +9,7 @@
     height: $percentage !important;
   }
 
-  .fs_per_#{$i} {
+  .fs-#{$i} {
     font-size: $percentage !important;
   }
 
@@ -113,8 +113,8 @@ $flex-wraps: (
 }
 
 $justify-contents: (
-  "flex-start": flex-start,
-  "flex-end": flex-end,
+  "start": start,
+  "center": center,
   "space-around": space-around,
   "space-between": space-between,
   "space-evenly": space-evenly
@@ -163,6 +163,25 @@ $text-aligns: (
   }
 }
 
+$align-selfs: (
+  "stretch": stretch,
+  "center": center,
+  "start": start,
+  "end": end,
+  "auto": auto,
+  "self-start": self-start,
+  "self-end": self-end,
+  "flex-start": flex-start,
+  "flex-end": flex-end,
+  "baseline": baseline
+);
+@each $type, $property in $align-selfs {
+  .self-#{$type} {
+    align-self: $property;
+  }
+}
+
+
 $floats: (
   "left": left,
   "right": right
@@ -175,4 +194,24 @@ $floats: (
 
 .font-weight-bold {
   font-weight: bold;
+}
+
+$colors: (
+  "darkmode-black": $darkmode-black,
+  "darkmode-gray": $darkmode-gray,
+  "darkmode-green": $darkmode-green,
+  "darkmode-light-green": $darkmode-light-green,
+  "darkmode-red": $darkmode-red,
+  "light-gray": $light-gray,
+  "darken-gray": $darken-gray,
+  "darken-blue": $darken-blue,
+  "light-blue": $light-blue,
+  "orange": $orange,
+  "green": $green,
+  "red": $red
+);
+@each $type, $property in $colors {
+  .#{$type} {
+    background-color: $property;
+  }
 }

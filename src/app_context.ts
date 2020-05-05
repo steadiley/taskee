@@ -2,7 +2,7 @@ import "reflect-metadata";
 import { Container } from "inversify";
 import getDecorators from "inversify-inject-decorators";
 
-import { TaskUsecase, AppTaskUsecase } from "@/app";
+import { TaskUsecase, AppTaskUsecase } from "@/apps";
 
 import { TaskRepository, TaskEventRepository } from "./domain/repository";
 

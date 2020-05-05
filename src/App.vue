@@ -1,13 +1,15 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link>
-      <div v-if="isLoggedIn">
-        <div>Signed in as {{ email }}</div>
-        <button @click="logout">Logout</button>
+    <UiContainer>
+      <div id="nav">
+        <router-link to="/">Home</router-link>
+        <div v-if="isLoggedIn">
+          <div>Signed in as {{ email }}</div>
+          <button @click="logout">Logout</button>
+        </div>
       </div>
-    </div>
-    <router-view />
+      <router-view />
+    </UiContainer>
   </div>
 </template>
 
@@ -22,8 +24,13 @@ import {
 } from "./composables/use_store";
 import { initializeFirebaseAuth } from "@/lib/firebase";
 
+import UiContainer from "@/components/ui/Container.vue";
+
 const App = defineComponent({
   name: "App",
+  components: {
+    UiContainer,
+  },
   setup(_, { root: { $store } }) {
     provideStore($store);
 

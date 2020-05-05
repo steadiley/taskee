@@ -4,7 +4,7 @@
  a,  blockquote, body, code, dd, div, dl, dt, em, fieldset, font, form, h1, h2, h3, h4,
  h5, h6, html, iframe, img, label, legend, li, object, ol, p, pre,
  q, small, span, strong, table, tbody, textarea, td, tfoot, th, thead, tr, ul, input,
- article, aside, dialog, footer, header, nav, main, menu, section { box-sizing:border-box; }
+ article, aside, dialog, footer, header, nav, main, menu, section { box-sizing:border-box; word-break: break-word; }
  input, textarea, select, button { font-family:inherit; font-size:100%; }
  :focus { outline:0; }
  a:active, a:hover, a:link, a:visited { text-decoration:none; color:inherit; }

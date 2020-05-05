@@ -1,14 +1,16 @@
 <template>
-  <span class="add-task-button" @click="showAddForm">
-    + Add Task
-  </span>
+  <UiButton @click.native="showAddForm"> + Add Task </UiButton>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "@vue/composition-api";
+import UiButton from "@/components/ui/Button.vue";
 
 const AddTaskButton = defineComponent({
   name: "AddTaskButton",
+  components: {
+    UiButton,
+  },
   setup(_, { emit }) {
     const showAddForm = () => {
       emit("click");
@@ -21,8 +23,4 @@ const AddTaskButton = defineComponent({
 export default AddTaskButton;
 </script>
 
-<style scoped lang="scss">
-.add-task-button:hover {
-  color: red;
-}
-</style>
+<style scoped lang="scss"></style>

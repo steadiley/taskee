@@ -1,7 +1,7 @@
 import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
 
 import { Task, TaskEvent } from "@/domain/entity";
-import { TaskUsecase } from "@/app";
+import { TaskUsecase } from "@/apps";
 import { lazyInject } from "@/app_context";
 
 export interface TaskState {

@@ -2,9 +2,13 @@
   <div class="home">
     <BulletinBoard v-if="runningTask" :runningTask="runningTask" />
     <TaskList :tasks="tasks" :runningTask="runningTask" />
-    <div v-if="shouldShowAddForm">
-      <AddTaskForm @cancel="hideAddForm" />
-    </div>
+    <UiRow v-if="shouldShowAddForm">
+      <UiCol>
+        <UiCard>
+          <AddTaskForm @cancel="hideAddForm" />
+        </UiCard>
+      </UiCol>
+    </UiRow>
     <template v-else>
       <AddTaskButton @click="showAddForm" />
     </template>
@@ -19,6 +23,9 @@ import AddTaskButton from "@/components/AddTaskButton.vue";
 import TaskList from "@/components/TaskList.vue";
 import BulletinBoard from "@/components/BulletinBoard.vue";
 import { useTaskStore } from "@/composables/use_store";
+import UiRow from "@/components/ui/Row.vue";
+import UiCol from "@/components/ui/Col.vue";
+import UiCard from "@/components/ui/Card.vue";
 
 const Home = defineComponent({
   name: "Home",
@@ -27,6 +34,9 @@ const Home = defineComponent({
     AddTaskButton,
     BulletinBoard,
     TaskList,
+    UiRow,
+    UiCol,
+    UiCard,
   },
   setup() {
     const taskStore = useTaskStore();
