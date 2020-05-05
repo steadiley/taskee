@@ -1,11 +1,11 @@
 <template>
-  <div>
+  <UiCard>
     <div>{{ task.title }}</div>
     <div>Total: {{ totalTimeSpent }} minutes</div>
     <button @click="toggleTimer(isRunning)">
       {{ isRunning ? "STOP" : "START" }}
     </button>
-  </div>
+  </UiCard>
 </template>
 
 <script lang="ts">

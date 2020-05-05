@@ -50,10 +50,10 @@ yarn lint
 firebase deploy --only firestore:rules
 ```
 
-- firebase store のルールをデプロイする (いずれ自動化したい)
+- firebase emulatorを起動
 
 ```
-firebase deploy --only firestore:rules
+yarn firestore
 ```
 
 
