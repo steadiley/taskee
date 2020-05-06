@@ -17,8 +17,12 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
+    - name: add jre for running firebase emulator
+      run: apk add --no-cache openjdk8-jre
     - name: yarn install
       run: yarn install --frozen-lockfile
+    - name: setup firebase emulator
+      run: apk add --no-cache openjdk8-jre
     - name: yarn lint
       run: yarn lint
     - name: yarn test:unit
