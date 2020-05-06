@@ -1,7 +1,6 @@
 import "reflect-metadata";
 import { Container } from "inversify";
 import getDecorators from "inversify-inject-decorators";
-import * as firebase from "firebase";
 
 import { TaskUsecase, AppTaskUsecase } from "@/apps";
 
