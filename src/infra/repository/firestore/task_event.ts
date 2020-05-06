@@ -1,17 +1,13 @@
-import { firestore } from "firebase";
+import firebase, { firestore } from "firebase";
 import { injectable } from "inversify";
 
 import { assertIsDefined } from "@/lib/assert";
 import { TaskEvent } from "@/domain/entity";
 import { TaskEventRepository } from "@/domain/repository";
-import firestoreClient from "./firestore_client";
 
 @injectable()
 export class FirestoreTaskEventRepository implements TaskEventRepository {
-  private db: firebase.firestore.Firestore;
-  constructor() {
-    this.db = firestoreClient;
-  }
+  constructor(private db: firebase.firestore.Firestore) {}
 
   async findAll(userId: string): Promise<TaskEvent[]> {
     const { docs } = await this.getTaskEventsRef(userId).limit(50).get();

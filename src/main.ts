@@ -3,7 +3,7 @@ import Vue from "vue";
 import VueCompositionApi from "@vue/composition-api";
 import App from "./App.vue";
 import router from "./router";
-import store from "./store";
+import createStore from "./store";
 import "firebaseui/dist/firebaseui.css";
 
 require("@/assets/scss/styles.scss");
@@ -13,6 +13,6 @@ Vue.use(VueCompositionApi);
 
 new Vue({
   router,
-  store,
+  store: createStore(),
   render: (h) => h(App),
 }).$mount("#app");

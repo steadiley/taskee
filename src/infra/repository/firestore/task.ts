@@ -5,14 +5,10 @@ import "@/lib/firebase";
 import { Task } from "@/domain/entity";
 import { TaskRepository } from "@/domain/repository";
 import { assertIsDefined } from "@/lib/assert";
-import firestoreClient from "./firestore_client";
 
 @injectable()
 export class FirestoreTaskRepository implements TaskRepository {
-  private db: firebase.firestore.Firestore;
-  constructor() {
-    this.db = firestoreClient;
-  }
+  constructor(private db: firebase.firestore.Firestore) {}
 
   async getTasksByDateRange(
     userId: string,

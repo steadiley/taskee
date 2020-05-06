@@ -1,10 +1,12 @@
 import "reflect-metadata";
 import { Container } from "inversify";
 import getDecorators from "inversify-inject-decorators";
+import * as firebase from "firebase";
 
 import { TaskUsecase, AppTaskUsecase } from "@/apps";
 
 import { TaskRepository, TaskEventRepository } from "./domain/repository";
+import { createFirestoreClient } from "./infra/repository/firestore/firestore_client";
 
 const container = new Container();
 
@@ -24,12 +26,13 @@ if (process.env.NODE_ENV === "test") {
     FirestoreTaskRepository,
     FirestoreTaskEventRepository,
   } = require("@/infra/repository/firestore");
+  const firestoreClient = createFirestoreClient();
   container
     .bind<TaskRepository>("TaskRepository")
-    .toConstantValue(new FirestoreTaskRepository());
+    .toConstantValue(new FirestoreTaskRepository(firestoreClient));
   container
     .bind<TaskEventRepository>("TaskEventRepository")
-    .toConstantValue(new FirestoreTaskEventRepository());
+    .toConstantValue(new FirestoreTaskEventRepository(firestoreClient));
 }
 
 container
