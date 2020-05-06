@@ -40,8 +40,16 @@ describe("task store", () => {
       .toConstantValue(new FirestoreTaskEventRepository(firestoreClient));
   };
 
+  const teardownFirestore = () => {
+    firestoreClient.terminate();
+  };
+
   beforeAll(() => {
     setupFirestore();
+  });
+
+  afterAll(() => {
+    teardownFirestore();
   });
 
   beforeEach(async () => {
@@ -147,7 +155,7 @@ describe("task store", () => {
       await taskStore.addTask({ title: "task" });
       const addedTask = taskStore.tasks[0];
 
-      await taskStore.addTaskEvent(
+      taskStore.addTaskEvent(
         new TaskEvent(
           "1",
           addedTask.id,
@@ -155,7 +163,7 @@ describe("task store", () => {
           new Date(2020, 5, 6, 5, 12, 31)
         )
       ); // 1 sec
-      await taskStore.addTaskEvent(
+      taskStore.addTaskEvent(
         new TaskEvent(
           "2",
           addedTask.id,
@@ -163,7 +171,7 @@ describe("task store", () => {
           new Date(2020, 5, 6, 5, 16, 0)
         )
       ); // 1 minute
-      await taskStore.addTaskEvent(
+      taskStore.addTaskEvent(
         new TaskEvent(
           "1",
           addedTask.id,
@@ -171,7 +179,7 @@ describe("task store", () => {
           new Date(2020, 5, 6, 7, 12, 30)
         )
       ); // 1 hour
-      await taskStore.addTaskEvent(
+      taskStore.addTaskEvent(
         new TaskEvent(
           "3",
           addedTask.id,
