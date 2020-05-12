@@ -22,6 +22,7 @@ import {
   useUserStore,
   useTaskStore,
 } from "./composables/use_store";
+import { provideRouter } from "@/composables/user_router";
 import { initializeFirebaseAuth } from "@/lib/firebase";
 
 import UiContainer from "@/components/ui/Container.vue";
@@ -31,8 +32,9 @@ const App = defineComponent({
   components: {
     UiContainer,
   },
-  setup(_, { root: { $store } }) {
+  setup(_, { root: { $store, $router, $route } }) {
     provideStore($store);
+    provideRouter({ router: $router, route: $route });
 
     const userStore = useUserStore();
     const taskStore = useTaskStore();
@@ -71,10 +73,6 @@ export default App;
   a {
     font-weight: bold;
     color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
   }
 }
 </style>

@@ -1,5 +1,11 @@
 <template>
   <div class="home">
+    <div>{{ query }}</div>
+
+    <router-link to="/?dueDate=">Backlog</router-link>
+    <router-link to="/?dueDate=today">Today</router-link>
+    <router-link to="/?dueDate=next-7-days">Next 7 days</router-link>
+
     <BulletinBoard v-if="runningTask" :runningTask="runningTask" />
     <TaskList :tasks="tasks" :runningTask="runningTask" />
     <UiRow v-if="shouldShowAddForm">
@@ -26,6 +32,7 @@ import { useTaskStore } from "@/composables/use_store";
 import UiRow from "@/components/ui/Row.vue";
 import UiCol from "@/components/ui/Col.vue";
 import UiCard from "@/components/ui/Card.vue";
+import { useRouter } from "@/composables/user_router";
 
 const Home = defineComponent({
   name: "Home",
@@ -40,6 +47,8 @@ const Home = defineComponent({
   },
   setup() {
     const taskStore = useTaskStore();
+    const { route } = useRouter();
+    const query = computed(() => route.query);
 
     const shouldShowAddForm = ref(false);
     const showAddForm = () => {
@@ -58,6 +67,7 @@ const Home = defineComponent({
       hideAddForm,
       tasks,
       runningTask,
+      query,
     };
   },
 });
