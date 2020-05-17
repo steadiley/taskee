@@ -20,13 +20,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ref, watch } from "@vue/composition-api";
+import { defineComponent, computed, ref } from "@vue/composition-api";
+import dayjs from "dayjs";
 
 import AddTaskForm from "@/components/AddTaskForm.vue";
 import AddTaskButton from "@/components/AddTaskButton.vue";
 import TaskList from "@/components/TaskList.vue";
 import BulletinBoard from "@/components/BulletinBoard.vue";
-import { useTaskStore, useUserStore } from "@/composables/use_store";
+import { useTaskStore } from "@/composables/use_store";
 import UiRow from "@/components/ui/Row.vue";
 import UiCol from "@/components/ui/Col.vue";
 import UiCard from "@/components/ui/Card.vue";
@@ -44,31 +45,8 @@ const Home = defineComponent({
     UiCard,
   },
   setup() {
-    const userStore = useUserStore();
     const taskStore = useTaskStore();
     const route = useRoute();
-
-    watch(
-      () => [route, userStore.isLoggedIn] as const,
-      async ([route, isLoggedIn]) => {
-        if (!isLoggedIn) {
-          return;
-        }
-        const dueDate = route.query.dueDate;
-        switch (dueDate) {
-          case "today":
-            await taskStore.fetchTodaysTasks();
-            break;
-          case "next-7-days":
-            await taskStore.fetchUpcomingTasks(7); // fetch next 7 days tasks
-            break;
-          default:
-            await taskStore.fetchBacklogTasks();
-            break;
-        }
-      },
-      { deep: true }
-    );
 
     const shouldShowAddForm = ref(false);
     const showAddForm = () => {
@@ -77,7 +55,29 @@ const Home = defineComponent({
     const hideAddForm = () => {
       shouldShowAddForm.value = false;
     };
-    const tasks = computed(() => taskStore.tasks);
+    const filteredTasks = computed(() => {
+      const tasks = taskStore.tasks;
+      const now = dayjs();
+      switch (route.query.dueDate) {
+        case undefined:
+        case "next-7-days":
+          return tasks.filter(
+            (task) =>
+              task.dueDate &&
+              now.startOf("day").toDate() <= task.dueDate &&
+              task.dueDate <= now.add(6, "day").endOf("day").toDate()
+          );
+        case "today":
+          return tasks.filter(
+            (task) =>
+              task.dueDate &&
+              now.startOf("day").toDate() <= task.dueDate &&
+              task.dueDate <= now.endOf("day").toDate()
+          );
+        default:
+          return tasks.filter((task) => !task.dueDate);
+      }
+    });
     const runningTask = computed(() => {
       return taskStore.runningTask;
     });
@@ -85,7 +85,7 @@ const Home = defineComponent({
       shouldShowAddForm,
       showAddForm,
       hideAddForm,
-      tasks,
+      tasks: filteredTasks,
       runningTask,
     };
   },

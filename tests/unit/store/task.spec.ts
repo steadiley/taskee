@@ -73,30 +73,30 @@ describe("task store", () => {
         title: "go to bookstore",
         dueDate: new Date(),
       });
-      await taskStore.fetchTodaysTasks();
+      await taskStore.fetchUnfinishedTasks();
       expect(taskStore.tasks).toHaveLength(1);
       await taskStore.addTask({
         title: "go to grocery store",
         dueDate: new Date(),
       });
-      await taskStore.fetchTodaysTasks();
+      await taskStore.fetchUnfinishedTasks();
       expect(taskStore.tasks).toHaveLength(2);
     });
   });
 
-  describe("fetchTodaysTasks", () => {
-    it("fetches tasks due today only", async () => {
+  describe("fetchUnfinishedTasks", () => {
+    it("fetches unfinished tasks", async () => {
+      // TODO: once finish/unfinish toggle feature is implemented, test that it really fetches only unfinished tasks
       const tasks = [
         { title: "today's task 1", dueDate: new Date() },
         { title: "tomorrow's task", dueDate: dayjs().add(1, "day").toDate() },
-        { title: "yesterday's task", dueDate: dayjs().add(-1, "day").toDate() },
         { title: "today's task 2", dueDate: new Date() },
       ];
       for (const task of tasks) {
         await taskStore.addTask(task);
       }
-      await taskStore.fetchTodaysTasks();
-      expect(taskStore.tasks).toHaveLength(2);
+      await taskStore.fetchUnfinishedTasks();
+      expect(taskStore.tasks).toHaveLength(3);
     });
   });
 

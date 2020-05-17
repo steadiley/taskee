@@ -8,7 +8,7 @@ export class Task {
     private _id: string,
     private _title: string,
     private _dueDate: Date | null = null,
-    private _finishdedAt: Date | null = null,
+    private _finishedAt: Date | null = null,
     _updatedAt: Date | null = null,
     _createdAt: Date | null = null
   ) {
@@ -47,7 +47,7 @@ export class Task {
   }
 
   get finishedAt(): Date | null {
-    return this._finishdedAt;
+    return this._finishedAt;
   }
   set finishedAt(newDate: Date | null) {
     const now = new Date();
@@ -55,7 +55,7 @@ export class Task {
     if (newDate && newDate <= now) {
       throw new InvalidArgumentError(`due date should be later than now`);
     }
-    this._finishdedAt = newDate;
+    this._finishedAt = newDate;
   }
 
   get updatedAt(): Date {

@@ -16,9 +16,7 @@ interface AddTaskEventCommand {
 }
 
 export interface TaskUsecase {
-  listTodaysTasks(userId: string): Promise<Task[]>;
-  listBacklogTasks(userId: string): Promise<Task[]>;
-  listUpcomingTasks(userId: string, days: number): Promise<Task[]>;
+  listUnfinishedTasks(userId: string): Promise<Task[]>;
   listTaskEvents(userId: string): Promise<TaskEvent[]>;
   addTask(userId: string, addTaskCommand: AddTaskCommand): Promise<Task>;
   addTaskEvent(
@@ -36,42 +34,8 @@ export class AppTaskUsecase implements TaskUsecase {
     private taskEventRepository: TaskEventRepository
   ) {}
 
-  async listTodaysTasks(userId: string): Promise<Task[]> {
-    const now = dayjs(); // TODO: deal with timezone setting of user
-    const startOfDay = now.startOf("day").toDate();
-    const endOfDay = now.endOf("day").toDate();
-
-    const tasks = await this.taskRepository.getTasksByDateRange(
-      userId,
-      startOfDay,
-      endOfDay
-    );
-    return tasks;
-  }
-
-  /**
-   * Get upcoming tasks from today to `number` days after (including today)
-   * @param userId
-   * @param days
-   */
-  async listUpcomingTasks(userId: string, days: number): Promise<Task[]> {
-    const now = dayjs(); // TODO: deal with timezone setting of user
-    const startOfDay = now.startOf("day").toDate();
-    const endOfDay = now
-      .add(days - 1, "day")
-      .endOf("day")
-      .toDate();
-
-    const tasks = await this.taskRepository.getTasksByDateRange(
-      userId,
-      startOfDay,
-      endOfDay
-    );
-    return tasks;
-  }
-
-  async listBacklogTasks(userId: string): Promise<Task[]> {
-    const tasks = await this.taskRepository.getTasksWithNoDueDate(userId);
+  async listUnfinishedTasks(userId: string): Promise<Task[]> {
+    const tasks = await this.taskRepository.getUnfinishedTasks(userId);
     return tasks;
   }
 

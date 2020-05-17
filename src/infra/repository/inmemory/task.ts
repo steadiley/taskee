@@ -13,18 +13,8 @@ export class InmemoryTaskRepository implements TaskRepository {
     }
   }
 
-  async getTasksByDateRange(
-    userId: string,
-    from: Date,
-    to: Date
-  ): Promise<Task[]> {
-    return this._tasks.filter(
-      (task) => task.dueDate && task.dueDate >= from && task.dueDate <= to
-    );
-  }
-
-  async getTasksWithNoDueDate(): Promise<Task[]> {
-    return this._tasks.filter((task) => !task.dueDate);
+  async getUnfinishedTasks(): Promise<Task[]> {
+    return this._tasks.filter((task) => !task.finishedAt);
   }
 
   async addTask(userId: string, task: Task): Promise<void> {
