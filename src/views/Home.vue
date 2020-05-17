@@ -22,7 +22,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ref } from "@vue/composition-api";
+import { defineComponent, computed, ref, watch } from "@vue/composition-api";
 
 import AddTaskForm from "@/components/AddTaskForm.vue";
 import AddTaskButton from "@/components/AddTaskButton.vue";
@@ -32,7 +32,7 @@ import { useTaskStore } from "@/composables/use_store";
 import UiRow from "@/components/ui/Row.vue";
 import UiCol from "@/components/ui/Col.vue";
 import UiCard from "@/components/ui/Card.vue";
-import { useRouter } from "@/composables/user_router";
+import { useRoute } from "@/composables/user_router";
 
 const Home = defineComponent({
   name: "Home",
@@ -47,8 +47,26 @@ const Home = defineComponent({
   },
   setup() {
     const taskStore = useTaskStore();
-    const { route } = useRouter();
-    const query = computed(() => route.query);
+    const route = useRoute();
+
+    watch(
+      () => route,
+      async (route) => {
+        const dueDate = route.query.dueDate;
+        switch (dueDate) {
+          case "today":
+            await taskStore.fetchTodaysTasks();
+            break;
+          case "next-7-days":
+            await taskStore.fetchTodaysTasks(); // fetch next 7 days tasks
+            break;
+          default:
+            await taskStore.fetchBacklogTasks();
+            break;
+        }
+      },
+      { deep: true }
+    );
 
     const shouldShowAddForm = ref(false);
     const showAddForm = () => {
@@ -67,7 +85,7 @@ const Home = defineComponent({
       hideAddForm,
       tasks,
       runningTask,
-      query,
+      query: route,
     };
   },
 });

@@ -15,14 +15,14 @@
 
 <script lang="ts">
 import firebase from "firebase";
-import { defineComponent, computed } from "@vue/composition-api";
+import { defineComponent, computed, reactive } from "@vue/composition-api";
 
 import {
   provideStore,
   useUserStore,
   useTaskStore,
 } from "./composables/use_store";
-import { provideRouter } from "@/composables/user_router";
+import { provideRouter, provideRoute } from "@/composables/user_router";
 import { initializeFirebaseAuth } from "@/lib/firebase";
 
 import UiContainer from "@/components/ui/Container.vue";
@@ -32,9 +32,16 @@ const App = defineComponent({
   components: {
     UiContainer,
   },
-  setup(_, { root: { $store, $router, $route } }) {
+  setup(_, { root: { $store, $router } }) {
     provideStore($store);
-    provideRouter({ router: $router, route: $route });
+    provideRouter($router);
+
+    const routeData = reactive({ params: {}, query: {} });
+    $router.afterEach((route) => {
+      routeData.params = route.params;
+      routeData.query = route.query;
+    });
+    provideRoute(routeData);
 
     const userStore = useUserStore();
     const taskStore = useTaskStore();
