@@ -64,6 +64,12 @@ export class TaskStore extends VuexModule {
   }
 
   @Action
+  async fetchUpcomingTasks(days: number) {
+    const tasks = await this.taskUsecase.listUpcomingTasks(this.uid, days);
+    this.setTasks(tasks);
+  }
+
+  @Action
   async addTask({ title, dueDate }: { title: string; dueDate?: Date }) {
     const newTask = await this.taskUsecase.addTask(this.uid, {
       title,

@@ -1,7 +1,5 @@
 <template>
   <div class="home">
-    <div>{{ query }}</div>
-
     <router-link to="/?dueDate=">Backlog</router-link>
     <router-link to="/?dueDate=today">Today</router-link>
     <router-link to="/?dueDate=next-7-days">Next 7 days</router-link>
@@ -28,7 +26,7 @@ import AddTaskForm from "@/components/AddTaskForm.vue";
 import AddTaskButton from "@/components/AddTaskButton.vue";
 import TaskList from "@/components/TaskList.vue";
 import BulletinBoard from "@/components/BulletinBoard.vue";
-import { useTaskStore } from "@/composables/use_store";
+import { useTaskStore, useUserStore } from "@/composables/use_store";
 import UiRow from "@/components/ui/Row.vue";
 import UiCol from "@/components/ui/Col.vue";
 import UiCard from "@/components/ui/Card.vue";
@@ -46,19 +44,23 @@ const Home = defineComponent({
     UiCard,
   },
   setup() {
+    const userStore = useUserStore();
     const taskStore = useTaskStore();
     const route = useRoute();
 
     watch(
-      () => route,
-      async (route) => {
+      () => [route, userStore.isLoggedIn] as const,
+      async ([route, isLoggedIn]) => {
+        if (!isLoggedIn) {
+          return;
+        }
         const dueDate = route.query.dueDate;
         switch (dueDate) {
           case "today":
             await taskStore.fetchTodaysTasks();
             break;
           case "next-7-days":
-            await taskStore.fetchTodaysTasks(); // fetch next 7 days tasks
+            await taskStore.fetchUpcomingTasks(7); // fetch next 7 days tasks
             break;
           default:
             await taskStore.fetchBacklogTasks();
@@ -85,7 +87,6 @@ const Home = defineComponent({
       hideAddForm,
       tasks,
       runningTask,
-      query: route,
     };
   },
 });

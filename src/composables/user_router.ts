@@ -1,5 +1,4 @@
-import Vue from "vue";
-import { inject, provide, computed } from "@vue/composition-api";
+import { inject, provide } from "@vue/composition-api";
 import VueRouter from "vue-router";
 
 const RouterSymbol = Symbol();

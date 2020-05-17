@@ -23,7 +23,4 @@ const router = new VueRouter({
   routes,
 });
 
-console.log("hogeeeeee");
-console.log(router);
-
 export default router;
