@@ -14,7 +14,7 @@ export class FirestoreTaskRepository implements TaskRepository {
     const query = this.getTasksRef(userId).where("finishedAt", "==", null); // finishedAt is null
     const result = await query.get();
 
-    const tasks = result.docs.map((doc) => {
+    const tasks = result.docs.map(doc => {
       const data: firestore.DocumentData = doc.data();
       return this.fromTaskDocToEntity(data);
     });
@@ -36,6 +36,10 @@ export class FirestoreTaskRepository implements TaskRepository {
     return this.fromTaskDocToEntity(data);
   }
 
+  async deleteTask(userId: string, taskId: string): Promise<void> {
+    await this.getTasksRef(userId).doc(taskId).delete();
+  }
+
   private toTaskDocFromEntity(task: Task): firestore.DocumentData {
     return {
       id: task.id,
@@ -43,7 +47,7 @@ export class FirestoreTaskRepository implements TaskRepository {
       dueDate: task.dueDate,
       finishedAt: task.finishedAt,
       createdAt: task.createdAt,
-      updatedAt: task.updatedAt,
+      updatedAt: task.updatedAt
     };
   }
 

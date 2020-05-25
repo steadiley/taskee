@@ -21,7 +21,7 @@ export interface TaskRepository {
 
   /**
    * @param userId user ID
-   * @param task task to delete
+   * @param taskId task ID of a task to delete
    */
-  deleteTask(userId: string, task: Task): Promise<void>;
+  deleteTask(userId: string, taskId: string): Promise<void>;
 }
