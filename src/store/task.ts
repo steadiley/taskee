@@ -32,14 +32,16 @@ export class TaskStore extends VuexModule {
 
   @Mutation
   updateTaskEvent(taskEvent: TaskEvent) {
-    const index = this.taskEvents.findIndex(event => event.id === taskEvent.id);
+    const index = this.taskEvents.findIndex(
+      (event) => event.id === taskEvent.id
+    );
     if (index === -1) {
       return;
     }
     this.taskEvents = [
       ...this.taskEvents.slice(0, index),
       taskEvent,
-      ...this.taskEvents.slice(index + 1)
+      ...this.taskEvents.slice(index + 1),
     ];
   }
 
@@ -59,7 +61,7 @@ export class TaskStore extends VuexModule {
   async addTask({ title, dueDate }: { title: string; dueDate?: Date }) {
     const newTask = await this.taskUsecase.addTask(this.uid, {
       title,
-      dueDate
+      dueDate,
     });
     this.setTasks(this.tasks.concat(newTask));
   }
@@ -88,13 +90,13 @@ export class TaskStore extends VuexModule {
   async startTask(id: string) {
     await this.stopRunningTask();
     const taskEvent = await this.taskUsecase.addTaskEvent(this.uid, {
-      taskId: id
+      taskId: id,
     });
     this.addTaskEvent(taskEvent);
   }
 
   get incompleteTaskEvent() {
-    return this.taskEvents.find(event => !event.endedAt);
+    return this.taskEvents.find((event) => !event.endedAt);
   }
 
   get runningTask(): { task: Task; startedAt: Date } | null {
@@ -103,12 +105,12 @@ export class TaskStore extends VuexModule {
       return null;
     }
     const task = this.tasks.find(
-      task => task.id === maybeIncompleteTaskEvent.taskId
+      (task) => task.id === maybeIncompleteTaskEvent.taskId
     );
     return task
       ? {
           task,
-          startedAt: maybeIncompleteTaskEvent.startedAt
+          startedAt: maybeIncompleteTaskEvent.startedAt,
         }
       : null;
   }
@@ -121,8 +123,8 @@ export class TaskStore extends VuexModule {
   get calcTotalTimeSpentById() {
     return (taskId: string) => {
       return this.taskEvents
-        .filter(event => event.taskId === taskId && event.isEnded)
-        .map(event => event.duration)
+        .filter((event) => event.taskId === taskId && event.isEnded)
+        .map((event) => event.duration)
         .reduce((a, b) => a + b, 0);
     };
   }
