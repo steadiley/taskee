@@ -47,13 +47,13 @@ export class TaskStore extends VuexModule {
 
   @Action
   async fetchInitData() {
-    await this.fetchTodaysTasks();
+    await this.fetchUnfinishedTasks();
     await this.fetchTaskEvents();
   }
 
   @Action
-  async fetchTodaysTasks() {
-    const tasks = await this.taskUsecase.listTodaysTasks(this.uid);
+  async fetchUnfinishedTasks() {
+    const tasks = await this.taskUsecase.listUnfinishedTasks(this.uid);
     this.setTasks(tasks);
   }
 

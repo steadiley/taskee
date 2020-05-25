@@ -10,30 +10,9 @@ import { assertIsDefined } from "@/lib/assert";
 export class FirestoreTaskRepository implements TaskRepository {
   constructor(private db: firebase.firestore.Firestore) {}
 
-  async getTasksByDateRange(
-    userId: string,
-    from: Date,
-    to?: Date
-  ): Promise<Task[]> {
-    let query = this.getTasksRef(userId).where("dueDate", ">=", from);
-
-    if (to) {
-      query = query.where("dueDate", "<=", to);
-    }
-
+  async getUnfinishedTasks(userId: string): Promise<Task[]> {
+    const query = this.getTasksRef(userId).where("finishedAt", "==", null); // finishedAt is null
     const result = await query.get();
-
-    const tasks = result.docs.map((doc) => {
-      const data: firestore.DocumentData = doc.data();
-      return this.fromTaskDocToEntity(data);
-    });
-    return tasks;
-  }
-
-  async getTasksWithNoDueDate(userId: string): Promise<Task[]> {
-    const result = await this.getTasksRef(userId)
-      .where("dueDate", "==", null)
-      .get();
 
     const tasks = result.docs.map((doc) => {
       const data: firestore.DocumentData = doc.data();
@@ -62,7 +41,7 @@ export class FirestoreTaskRepository implements TaskRepository {
       id: task.id,
       title: task.title,
       dueDate: task.dueDate,
-      finishdedAt: task.finishedAt,
+      finishedAt: task.finishedAt,
       createdAt: task.createdAt,
       updatedAt: task.updatedAt,
     };
@@ -75,7 +54,7 @@ export class FirestoreTaskRepository implements TaskRepository {
       data.id,
       data.title,
       data.dueDate ? data.dueDate.toDate() : null,
-      data.finishedAt ? data.finishdedAt.toDate() : null,
+      data.finishedAt ? data.finishedAt.toDate() : null,
       data.createdAt ? data.createdAt.toDate() : null,
       data.updatedAt ? data.updatedAt.toDate() : null
     );
