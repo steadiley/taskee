@@ -2,11 +2,7 @@ import { Task } from "@/domain/entity";
 import { TaskRepository } from "@/domain/repository";
 import { injectable } from "inversify";
 
-const defaultTasks: Task[] = [
-  new Task("1", "read a book", null, null),
-  new Task("2", "go to gym", null, null),
-  new Task("3", "cook oyakodon", null, null),
-];
+const defaultTasks: Task[] = [];
 
 @injectable()
 export class InmemoryTaskRepository implements TaskRepository {
@@ -32,7 +28,7 @@ export class InmemoryTaskRepository implements TaskRepository {
   }
 
   async addTask(userId: string, task: Task): Promise<void> {
-    this._tasks.concat(task);
+    this._tasks = this._tasks.concat(task);
   }
 
   async getTaskById(): Promise<Task | null> {

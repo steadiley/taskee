@@ -10,9 +10,13 @@ export interface RootState {
   task: TaskState;
 }
 
-export default new Vuex.Store<RootState>({
-  modules: {
-    user: UserStore,
-    task: TaskStore,
-  },
-});
+const createStore = () => {
+  return new Vuex.Store<RootState>({
+    modules: {
+      user: UserStore,
+      task: TaskStore,
+    },
+  });
+};
+
+export default createStore;

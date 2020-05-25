@@ -19,6 +19,8 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - name: yarn install
       run: yarn install --frozen-lockfile
+    - name: setup firebase emulator
+      run: npx firebase setup:emulators:firestore 
     - name: yarn lint
       run: yarn lint
     - name: yarn test:unit

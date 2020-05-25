@@ -1,14 +1,15 @@
-import firebase from "firebase";
+import * as firebase from "firebase";
 
-const firestore = firebase.firestore();
-if (
-  process.env.VUE_APP_FIREBASE_FIRESTORE_USE_REAL !== "true" &&
-  location.hostname === "localhost"
-) {
-  firestore.settings({
-    host: `localhost:${process.env.VUE_APP_FIREBASE_FIRESTORE_EMULATOR_PORT}`,
-    ssl: false,
-  });
-}
-
-export default firestore;
+export const createFirestoreClient = (): firebase.firestore.Firestore => {
+  const client = firebase.firestore();
+  if (
+    process.env.VUE_APP_FIREBASE_FIRESTORE_USE_REAL !== "true" &&
+    location.hostname === "localhost"
+  ) {
+    client.settings({
+      host: `localhost:${process.env.VUE_APP_FIREBASE_FIRESTORE_EMULATOR_PORT}`,
+      ssl: false,
+    });
+  }
+  return client;
+};
