@@ -95,6 +95,11 @@ export class TaskStore extends VuexModule {
     this.addTaskEvent(taskEvent);
   }
 
+  @Action
+  async finishTask(id: string) {
+    // TODO:
+  }
+
   get incompleteTaskEvent() {
     return this.taskEvents.find((event) => !event.endedAt);
   }

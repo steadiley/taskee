@@ -36,7 +36,7 @@ interface Props {
   label: string;
   name: string;
   color: string;
-  index: number;
+  index: string;
   labelPosition: string;
 }
 
@@ -46,7 +46,7 @@ const Button = defineComponent({
   props: {
     value: { type: Array },
     label: { type: String },
-    index: { type: Number },
+    index: { type: String },
     inputValue: { type: String },
     labelPosition: { type: String },
     color: { type: String, default: "green" },

@@ -1,22 +1,24 @@
 <template>
-  <UiCard>
-    <UiCheckbox
-      v-for="(option, index) in checkOptions"
-      v-model="myCheckBoxModel"
-      :key="index"
-      :index="index"
-      :input-value="task.id"
-      :label="option.label"
-      :labelPosition="option.labelPosition"
-      :color="option.color"
-    />
-    <div v-for="item in myCheckBoxModel" :key="item">{{ item }}</div>
-    <div>{{ task.title }}</div>
-    <div>Total: {{ totalTimeSpent }} minutes</div>
-    <button @click="toggleTimer(isRunning)">
-      {{ isRunning ? "STOP" : "START" }}
-    </button>
-  </UiCard>
+  <UiRow>
+    <UiCol>
+      <UiCard>
+        <UiCheckbox
+          v-model="myCheckBoxModel"
+          @change="toggleCheck(isChecked)"
+          :index="task.id"
+          :input-value="task.id"
+          :color="checkOptions.color"
+        />
+        <div>{{ task }}</div>
+        <div>{{ myCheckBoxModel }}</div>
+        <div>{{ task.title }}</div>
+        <div>Total: {{ totalTimeSpent }} minutes</div>
+        <button @click="toggleTimer(isRunning)">
+          {{ isRunning ? "STOP" : "START" }}
+        </button>
+      </UiCard>
+    </UiCol>
+  </UiRow>
 </template>
 
 <script lang="ts">
@@ -24,6 +26,8 @@ import { defineComponent, computed, reactive } from "@vue/composition-api";
 import { Task } from "../domain/entity";
 import { useTaskStore } from "../composables/use_store";
 import UiCard from "@/components/ui/Card.vue";
+import UiRow from "@/components/ui/Row.vue";
+import UiCol from "@/components/ui/Col.vue";
 import UiCheckbox from "@/components/ui/Checkbox.vue";
 
 interface Props {
@@ -31,9 +35,10 @@ interface Props {
   runningTask: { task: Task; startedAt: Date };
 }
 
+// タイマーロジックの分離
 export const useTimer = (taskId: string) => {
+  // VuexのTaskStoreのClassを変数に代入
   const taskStore = useTaskStore();
-  console.log(taskStore);
   const toggleTimer = async (isRunning: boolean) => {
     if (isRunning) {
       await taskStore.stopRunningTask();
@@ -41,15 +46,29 @@ export const useTimer = (taskId: string) => {
       await taskStore.startTask(taskId);
     }
   };
+  console.log(toggleTimer);
   return {
     toggleTimer,
   };
 };
 
+// export const useCheck = (taskId: string) => {
+//   const taskStore = useTaskStore();
+//   const toggleCheck = async (isChecked: boolean) => {
+//     if (isChecked) {
+//       await myCheckBoxModel.push(taskId);
+//     } else {
+//       await myCheckBoxModel.filter(item => item !== taskId);
+//     }
+//   };
+// };
+
 const TaskCard = defineComponent({
   name: "TaskCard",
   components: {
     UiCard,
+    UiRow,
+    UiCol,
     UiCheckbox,
   },
   props: {
@@ -59,21 +78,7 @@ const TaskCard = defineComponent({
   setup(props: Props) {
     const checkOptions = [
       {
-        label: "Option 1",
-        value: "value of option 1",
-        labelPosition: "left",
         color: "red",
-      },
-      {
-        label: "Option 2",
-        value: "value of option 2",
-      },
-      {
-        label: "Option 3",
-        value: "value of option 3",
-      },
-      {
-        value: "value of option 4",
       },
     ];
     const myCheckBoxModel = reactive([]);
