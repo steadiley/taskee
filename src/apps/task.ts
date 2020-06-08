@@ -23,6 +23,7 @@ export interface TaskUsecase {
     userId: string,
     addTaskEventCommand: AddTaskEventCommand
   ): Promise<TaskEvent>;
+  updateTask(userId: string, task: Task): Promise<Task>;
   updateTaskEvent(userId: string, taskEvent: TaskEvent): Promise<TaskEvent>;
 }
 
@@ -43,8 +44,15 @@ export class AppTaskUsecase implements TaskUsecase {
     userId: string,
     { title, dueDate }: AddTaskCommand
   ): Promise<Task> {
+    console.log("src/app/addTask");
     const task = TaskFactory.createTask(title, dueDate);
     await this.taskRepository.addTask(userId, task);
+    return task;
+  }
+
+  async updateTask(userId: string, task: Task): Promise<Task> {
+    console.log("src/app/updateTask");
+    await this.taskRepository.updateTask(userId, task);
     return task;
   }
 
@@ -52,6 +60,7 @@ export class AppTaskUsecase implements TaskUsecase {
     userId: string,
     { taskId }: AddTaskEventCommand
   ): Promise<TaskEvent> {
+    console.log("src/app/addTaskEvent");
     const taskEvent = new TaskEvent(cuid(), taskId, new Date());
     await this.taskEventRepository.add(userId, taskEvent);
     return taskEvent;
@@ -61,6 +70,7 @@ export class AppTaskUsecase implements TaskUsecase {
     userId: string,
     taskEvent: TaskEvent
   ): Promise<TaskEvent> {
+    console.log("src/app/updataTaskEvent");
     await this.taskEventRepository.update(userId, taskEvent);
     return taskEvent;
   }

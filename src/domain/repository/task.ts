@@ -18,4 +18,6 @@ export interface TaskRepository {
    * @param id task id for which to fetch corresponding task. returns null if not found.
    */
   getTaskById(userId: string, id: string): Promise<Task | null>;
+
+  updateTask(userId: string, task: Task): Promise<void>;
 }
