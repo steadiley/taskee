@@ -52,8 +52,10 @@ export class Task {
   set finishedAt(newDate: Date | null) {
     const now = new Date();
 
-    if (newDate && newDate <= now) {
-      throw new InvalidArgumentError(`due date should be later than now`);
+    if (newDate && newDate < now) {
+      throw new InvalidArgumentError(
+        `finishedAt should be later than createdAt`
+      );
     }
     this._finishedAt = newDate;
   }
