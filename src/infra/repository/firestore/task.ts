@@ -22,7 +22,7 @@ export class FirestoreTaskRepository implements TaskRepository {
   }
 
   async addTask(userId: string, task: Task): Promise<void> {
-    console.log(this.toTaskDocFromEntity(task));
+    console.log("infra/repository/firestore/addTask");
     await this.getTasksRef(userId)
       .doc(task.id)
       .set(this.toTaskDocFromEntity(task));

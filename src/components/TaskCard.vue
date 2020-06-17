@@ -10,9 +10,6 @@
           :color="checkOptions.color"
           @input="toggleCheck"
         />
-        <div>
-          {{ myCheckBoxModel }}
-        </div>
         <div>{{ task.title }}</div>
         <div>Total: {{ totalTimeSpent }} minutes</div>
         <button @click="toggleTimer(isRunning)">
@@ -35,6 +32,7 @@ import UiCheckbox from "@/components/ui/Checkbox.vue";
 interface Props {
   task: Task;
   runningTask: { task: Task; startedAt: Date };
+  finishTask: { task: Task };
 }
 
 // タイマーロジックの分離
@@ -64,12 +62,12 @@ const TaskCard = defineComponent({
   props: {
     task: Object,
     runningTask: Object,
+    finishTask: Object,
   },
   setup(props: Props) {
     const checkOptions = {
       color: "red",
     };
-    const check = true;
     const taskStore = useTaskStore();
     const isChecked = computed(() => {
       // console.log(123);
@@ -79,7 +77,6 @@ const TaskCard = defineComponent({
       if (isChecked && isChecked.length > 0) {
         await taskStore.finishedTask(props.task.id);
       } else {
-        console.log("入ったよー");
         await taskStore.returnTask(props.task.id);
       }
     };
@@ -101,7 +98,6 @@ const TaskCard = defineComponent({
       myCheckBoxModel,
       toggleCheck,
       isChecked,
-      check,
     };
   },
 });

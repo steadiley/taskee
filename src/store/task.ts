@@ -59,7 +59,6 @@ export class TaskStore extends VuexModule {
       task,
       ...this.tasks.slice(index + 1),
     ];
-    console.log(this.tasks);
   }
 
   @Action
