@@ -3,7 +3,6 @@
     <router-link to="/?dueDate=">Backlog</router-link>
     <router-link to="/?dueDate=today">Today</router-link>
     <router-link to="/?dueDate=next-7-days">Next 7 days</router-link>
-
     <BulletinBoard v-if="runningTask" :runningTask="runningTask" />
     <TaskList :tasks="tasks" :runningTask="runningTask" />
     <UiRow v-if="shouldShowAddForm">
@@ -81,6 +80,7 @@ const Home = defineComponent({
     const runningTask = computed(() => {
       return taskStore.runningTask;
     });
+    console.log(filteredTasks);
     return {
       shouldShowAddForm,
       showAddForm,

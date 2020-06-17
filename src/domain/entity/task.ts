@@ -1,16 +1,16 @@
 import { InvalidArgumentError } from "@/errors";
 
 export class Task {
-  private _updatedAt!: Date;
-  private _createdAt!: Date;
+  // private _updatedAt!: Date;
+  // private _createdAt!: Date;
 
   constructor(
     private _id: string,
     private _title: string,
     private _dueDate: Date | null = null,
     private _finishedAt: Date | null = null,
-    _updatedAt: Date | null = null,
-    _createdAt: Date | null = null
+    private _updatedAt: Date,
+    private _createdAt: Date
   ) {
     const now = new Date();
     if (!_updatedAt) {
@@ -51,13 +51,7 @@ export class Task {
   }
   set finishedAt(newDate: Date | null) {
     const now = new Date();
-
-    if (newDate && newDate < now) {
-      throw new InvalidArgumentError(
-        `finishedAt should be later than createdAt`
-      );
-    }
-    this._finishedAt = newDate;
+    this._finishedAt = now;
   }
 
   get updatedAt(): Date {

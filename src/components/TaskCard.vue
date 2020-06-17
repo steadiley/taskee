@@ -1,16 +1,18 @@
 <template>
   <UiRow>
+    {{ task }}
     <UiCol>
       <UiCard>
         <UiCheckbox
           v-model="myCheckBoxModel"
-          @change="toggleCheck(isChecked)"
           :index="task.id"
           :input-value="task.id"
           :color="checkOptions.color"
+          @input="toggleCheck"
         />
-        <div>{{ task }}</div>
-        <div>{{ myCheckBoxModel }}</div>
+        <div>
+          {{ myCheckBoxModel }}
+        </div>
         <div>{{ task.title }}</div>
         <div>Total: {{ totalTimeSpent }} minutes</div>
         <button @click="toggleTimer(isRunning)">
@@ -46,22 +48,10 @@ export const useTimer = (taskId: string) => {
       await taskStore.startTask(taskId);
     }
   };
-  console.log(toggleTimer);
   return {
     toggleTimer,
   };
 };
-
-// export const useCheck = (taskId: string) => {
-//   const taskStore = useTaskStore();
-//   const toggleCheck = async (isChecked: boolean) => {
-//     if (isChecked) {
-//       await myCheckBoxModel.push(taskId);
-//     } else {
-//       await myCheckBoxModel.filter(item => item !== taskId);
-//     }
-//   };
-// };
 
 const TaskCard = defineComponent({
   name: "TaskCard",
@@ -76,17 +66,29 @@ const TaskCard = defineComponent({
     runningTask: Object,
   },
   setup(props: Props) {
-    const checkOptions = [
-      {
-        color: "red",
-      },
-    ];
+    const checkOptions = {
+      color: "red",
+    };
+    const check = true;
+    const taskStore = useTaskStore();
+    const isChecked = computed(() => {
+      // console.log(123);
+      return props.runningTask && props.task.id === props.runningTask.task.id;
+    });
+    const toggleCheck = async (isChecked: boolean | any) => {
+      if (isChecked && isChecked.length > 0) {
+        await taskStore.finishedTask(props.task.id);
+      } else {
+        console.log("入ったよー");
+        await taskStore.returnTask(props.task.id);
+      }
+    };
+    // const myCheckBoxModel = reactive([]);
     const myCheckBoxModel = reactive([]);
     const { toggleTimer } = useTimer(props.task.id);
     const isRunning = computed(() => {
       return props.runningTask && props.task.id === props.runningTask.task.id;
     });
-    const taskStore = useTaskStore();
     const totalTimeSpent = computed(() => {
       const totalMillisec = taskStore.calcTotalTimeSpentById(props.task.id);
       return Math.floor(totalMillisec / (60 * 1000));
@@ -97,6 +99,9 @@ const TaskCard = defineComponent({
       totalTimeSpent,
       checkOptions,
       myCheckBoxModel,
+      toggleCheck,
+      isChecked,
+      check,
     };
   },
 });

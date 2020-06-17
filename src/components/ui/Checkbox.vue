@@ -55,7 +55,7 @@ const Button = defineComponent({
     const checkLabel = computed(() => `${props.label}`);
     const checkIndex = computed(() => `${props.index}`);
     const position = computed(() => `${props.labelPosition}`);
-    const checkColor = reactive({ state: "" });
+    const checkColor = reactive({ state: props.color });
 
     const changeValue = (e: any) => {
       let currentValue = [...props.value];
