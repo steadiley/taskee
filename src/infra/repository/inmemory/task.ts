@@ -25,4 +25,8 @@ export class InmemoryTaskRepository implements TaskRepository {
     // FIXME: not functioning
     return null;
   }
+
+  async deleteTask(userId: string, taskId: string): Promise<void> {
+    this._tasks = this._tasks.filter((task) => task.id !== taskId);
+  }
 }
