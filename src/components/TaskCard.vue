@@ -96,16 +96,6 @@ const TaskCard = defineComponent({
     const isChecked = computed(() => {
       return props.runningTask && props.task.id === props.runningTask.task.id;
     });
-    // const toggleCheck = async (isChecked: string) => {
-    //   if (isChecked && isChecked.length > 0) {
-    //     await taskStore.finishedTask(props.task.id);
-    //     if (!props.task.finishedAt) {
-    //       await myCheckBoxModel.splice(0);
-    //     }
-    //   } else {
-    //     await taskStore.returnTask(props.task.id);
-    //   }
-    // };
     return {
       toggleTimer,
       isRunning,
