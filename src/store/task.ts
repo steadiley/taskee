@@ -118,6 +118,8 @@ export class TaskStore extends VuexModule {
   @Action
   async deleteTask(id: string) {
     await this.taskUsecase.deleteTask(this.uid, id);
+    const remainingTasks = this.tasks.filter((task) => task.id !== id);
+    this.setTasks(remainingTasks);
   }
 
   get calcTotalTimeSpentById() {
