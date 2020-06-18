@@ -24,6 +24,17 @@ export class FirestoreTaskEventRepository implements TaskEventRepository {
       .set(this.toDocFromEntity(taskEvent));
   }
 
+  async deleteAllTaskEvents(userId: string, taskId: string): Promise<void> {
+    const batch = this.db.batch();
+    const deleteTargets = (
+      await this.getTaskEventsRef(userId).where("taskId", "==", taskId).get()
+    ).docs;
+    for (const taskEvent of deleteTargets) {
+      batch.delete(taskEvent);
+    }
+    await batch.commit();
+  }
+
   private toDocFromEntity(taskEvent: TaskEvent): firestore.DocumentData {
     return {
       id: taskEvent.id,

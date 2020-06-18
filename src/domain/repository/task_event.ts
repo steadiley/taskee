@@ -18,4 +18,11 @@ export interface TaskEventRepository {
    * @param taskEvent a task event to update
    */
   update(userId: string, taskEvent: TaskEvent): Promise<void>;
+
+  /**
+   * delete all task events for the specified task
+   * @param userId user ID
+   * @param taskId task ID of a task event to delete
+   */
+  deleteAllTaskEvents(userId: string, taskId: string): Promise<void>;
 }

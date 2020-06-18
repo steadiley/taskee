@@ -50,6 +50,7 @@ export class AppTaskUsecase implements TaskUsecase {
 
   async deleteTask(userId: string, taskId: string): Promise<void> {
     await this.taskRepository.deleteTask(userId, taskId);
+    await this.taskEventRepository.deleteAllTaskEvents(userId, taskId);
   }
 
   async addTaskEvent(
