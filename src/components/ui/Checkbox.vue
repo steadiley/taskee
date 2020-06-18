@@ -5,7 +5,6 @@
         v-if="labelPosition && labelPosition === 'left'"
         class="checkbox-label left"
       >
-        {{ label }}
       </span>
       <input
         :id="index"
@@ -14,7 +13,7 @@
         @change="changeValue"
         class="checkbox-input"
       />
-      <div class="virtual-checkbox" :class="checkColor.state">
+      <div class="virtual-checkbox" :class="[checkColor.state]">
         <div class="virtual-check"></div>
       </div>
       <span
@@ -56,8 +55,9 @@ const Button = defineComponent({
     const checkIndex = computed(() => `${props.index}`);
     const position = computed(() => `${props.labelPosition}`);
     const checkColor = reactive({ state: props.color });
-
-    const changeValue = (e: any) => {
+    checkColor.state = reactive("transparent");
+    // console.log(props.inputValue);
+    const changeValue = (e: string | any) => {
       let currentValue = [...props.value];
       if (e.target.checked) {
         currentValue.push(e.target.value);

@@ -22,7 +22,6 @@ export class FirestoreTaskRepository implements TaskRepository {
   }
 
   async addTask(userId: string, task: Task): Promise<void> {
-    console.log(this.toTaskDocFromEntity(task));
     await this.getTasksRef(userId)
       .doc(task.id)
       .set(this.toTaskDocFromEntity(task));
@@ -34,19 +33,16 @@ export class FirestoreTaskRepository implements TaskRepository {
     if (!data) {
       return null;
     }
-    console.log(this.fromTaskDocToEntity(data));
     return this.fromTaskDocToEntity(data);
   }
 
   async updateTask(userId: string, task: Task): Promise<void> {
-    console.log(this.toTaskDocFromEntity(task));
     await this.getTasksRef(userId)
       .doc(task.id)
       .set(this.toTaskDocFromEntity(task));
   }
 
   private toTaskDocFromEntity(task: Task): firestore.DocumentData {
-    console.log(task);
     return {
       id: task.id,
       title: task.title,

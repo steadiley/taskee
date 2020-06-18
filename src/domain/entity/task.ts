@@ -50,8 +50,7 @@ export class Task {
     return this._finishedAt;
   }
   set finishedAt(newDate: Date | null) {
-    const now = new Date();
-    this._finishedAt = now;
+    this._finishedAt = newDate;
   }
 
   get updatedAt(): Date {

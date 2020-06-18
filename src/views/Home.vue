@@ -80,7 +80,6 @@ const Home = defineComponent({
     const runningTask = computed(() => {
       return taskStore.runningTask;
     });
-    console.log(filteredTasks);
     return {
       shouldShowAddForm,
       showAddForm,
