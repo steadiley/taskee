@@ -215,7 +215,7 @@ describe("task store", () => {
       expect(remainingTasks).toHaveLength(2);
     });
 
-    it("throws error when specified task does not exist", async () => {
+    it("does nothing when specified task does not exist", async () => {
       const targetId = "non-existent-id";
       expect(taskStore.deleteTask(targetId)).resolves.toBeUndefined();
       const remainingTasks = taskStore.tasks;
