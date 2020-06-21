@@ -18,7 +18,7 @@ import { defineComponent, computed } from "@vue/composition-api";
 import { Task } from "../domain/entity";
 import { useTaskStore } from "../composables/use_store";
 import UiCard from "@/components/ui/Card.vue";
-import DeleteButton from "@/components/ui/DeleteButton";
+import DeleteButton from "@/components/ui/DeleteButton.vue";
 
 interface Props {
   task: Task;
