@@ -1,18 +1,19 @@
 <template>
   <UiRow>
-    {{ task }}
     <UiCol>
-      <UiCard>
+      <UiCard :class="{ 'disabled-task': task.finishedAt }">
         <UiCheckbox
           v-model="myCheckBoxModel"
           :index="task.id"
           :input-value="task.id"
-          :color="checkOptions.color"
           @input="toggleCheck"
         />
         <div>{{ task.title }}</div>
         <div>Total: {{ totalTimeSpent }} minutes</div>
-        <button @click="toggleTimer(isRunning)">
+        <button
+          @click="toggleTimer(isRunning)"
+          :class="{ 'event-none': task.finishedAt }"
+        >
           {{ isRunning ? "STOP" : "START" }}
         </button>
       </UiCard>
@@ -77,9 +78,6 @@ const TaskCard = defineComponent({
     finishTask: Object,
   },
   setup(props: Props) {
-    const checkOptions = {
-      color: "red",
-    };
     const taskStore = useTaskStore();
     // const myCheckBoxModel = reactive([]);
     const myCheckBoxModel = reactive([]);
@@ -100,7 +98,6 @@ const TaskCard = defineComponent({
       toggleTimer,
       isRunning,
       totalTimeSpent,
-      checkOptions,
       myCheckBoxModel,
       toggleCheck,
       isChecked,
@@ -114,5 +111,13 @@ export default TaskCard;
 .task {
   border: 1px solid black;
   border-radius: 5px;
+}
+.disabled-task {
+  border: 1px solid $green;
+  color: $green;
+  opacity: 0.5;
+}
+.event-none {
+  pointer-events: none;
 }
 </style>
