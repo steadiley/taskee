@@ -79,7 +79,6 @@ const TaskCard = defineComponent({
   },
   setup(props: Props) {
     const taskStore = useTaskStore();
-    // const myCheckBoxModel = reactive([]);
     const myCheckBoxModel = reactive([]);
     const { toggleTimer } = useTimer(props.task.id);
     const isRunning = computed(() => {
