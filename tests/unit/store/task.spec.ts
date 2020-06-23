@@ -168,7 +168,6 @@ describe("task store", () => {
       expect(firstTask.finishedAt).toBeTruthy();
     });
     it("toggle returnTask", async () => {
-      // await taskStore.fetchInitData();
       await taskStore.fetchInitData();
       const firstTask = taskStore.tasks[0];
       await taskStore.returnTask(firstTask.id);
