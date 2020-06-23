@@ -110,6 +110,7 @@ export class TaskStore extends VuexModule {
 
   @Action
   async finishedTask(id: string) {
+    await this.stopRunningTask();
     const maybeCompleteTask = this.tasks.find((item) => item.id === id);
     if (maybeCompleteTask) {
       maybeCompleteTask.finishedAt = new Date();

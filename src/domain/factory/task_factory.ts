@@ -8,6 +8,13 @@ export class TaskFactory {
   }
 
   static createTask(title: string, dueDate?: Date): Task {
-    return new Task(this.generateId(), title, dueDate);
+    return new Task(
+      this.generateId(),
+      title,
+      dueDate,
+      null,
+      new Date(),
+      new Date()
+    );
   }
 }
