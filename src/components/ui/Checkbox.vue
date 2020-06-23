@@ -54,16 +54,15 @@ const Button = defineComponent({
     const checkLabel = computed(() => `${props.label}`);
     const checkIndex = computed(() => `${props.index}`);
     const position = computed(() => `${props.labelPosition}`);
-    const checkColor = reactive({ state: props.color });
-    checkColor.state = reactive("transparent");
-    // console.log(props.inputValue);
+    let checkColor = reactive({ state: props.color });
+    checkColor = reactive({ state: "transparent" });
     const changeValue = (e: string | any) => {
       let currentValue = [...props.value];
       if (e.target.checked) {
         currentValue.push(e.target.value);
-        checkColor.state = reactive(props.color);
+        checkColor = reactive({ state: props.color });
       } else {
-        checkColor.state = reactive("transparent");
+        checkColor = reactive({ state: "transparent" });
         currentValue = currentValue.filter((item) => item !== e.target.value);
       }
       emit("input", currentValue);
