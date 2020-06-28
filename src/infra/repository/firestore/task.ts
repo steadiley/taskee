@@ -36,6 +36,10 @@ export class FirestoreTaskRepository implements TaskRepository {
     return this.fromTaskDocToEntity(data);
   }
 
+  async deleteTask(userId: string, taskId: string): Promise<void> {
+    await this.getTasksRef(userId).doc(taskId).delete();
+  }
+
   private toTaskDocFromEntity(task: Task): firestore.DocumentData {
     return {
       id: task.id,

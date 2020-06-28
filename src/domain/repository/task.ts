@@ -18,4 +18,10 @@ export interface TaskRepository {
    * @param id task id for which to fetch corresponding task. returns null if not found.
    */
   getTaskById(userId: string, id: string): Promise<Task | null>;
+
+  /**
+   * @param userId user ID
+   * @param taskId task ID of a task to delete
+   */
+  deleteTask(userId: string, taskId: string): Promise<void>;
 }
