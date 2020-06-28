@@ -1,6 +1,6 @@
 <template>
-  <div class="close-button" @click="onClick">
-    <span class="close-icon" />
+  <div class="delete-button" @click="onClick">
+    <span class="delete-icon" />
   </div>
 </template>
 
@@ -24,7 +24,7 @@ export default DeleteButton;
 </script>
 
 <style scoped lang="scss">
-.close-button {
+.delete-button {
   display: inline-block;
   width: 20px;
   height: 20px;
@@ -37,12 +37,12 @@ export default DeleteButton;
   box-shadow: $shadow-type-default;
 }
 
-.close-icon {
+.delete-icon {
   font-size: 20px;
   line-height: 0;
 }
 
-.close-icon:before {
+.delete-icon:before {
   content: "×";
 }
 </style>
