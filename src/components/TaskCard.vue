@@ -91,12 +91,7 @@ export default TaskCard;
 
 .delete-button {
   position: absolute;
-  margin-right: 10px;
-}
-
-.delete-button {
-  position: absolute;
-  right: -20px;
-  top: -10px;
+  right: -3px;
+  top: -5px;
 }
 </style>
