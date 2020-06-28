@@ -3,11 +3,12 @@
     <UiCol>
       <UiCard :class="{ 'disabled-task': task.finishedAt }">
         <UiCheckbox
-          v-model="myCheckBoxModel"
+          v-model="checkBoxModel"
           :index="task.id"
           :input-value="task.id"
           @input="toggleCheck"
         />
+        <div>{{ task }}</div>
         <div>{{ task.title }}</div>
         <div>Total: {{ totalTimeSpent }} minutes</div>
         <button
@@ -52,11 +53,11 @@ export const useTimer = (taskId: string) => {
 
 export const useCheck = (taskId: string) => {
   const taskStore = useTaskStore();
-  const toggleCheck = async (isChecked: string) => {
-    if (isChecked && isChecked.length > 0) {
-      await taskStore.finishedTask(taskId);
+  const toggleCheck = async (id: string) => {
+    if (id && id.length > 0) {
+      await taskStore.finishTask(taskId);
     } else {
-      await taskStore.returnTask(taskId);
+      await taskStore.unfinishTask(taskId);
     }
   };
   return {
@@ -79,7 +80,7 @@ const TaskCard = defineComponent({
   },
   setup(props: Props) {
     const taskStore = useTaskStore();
-    const myCheckBoxModel = reactive([]);
+    const checkBoxModel = reactive([]);
     const { toggleTimer } = useTimer(props.task.id);
     const isRunning = computed(() => {
       return props.runningTask && props.task.id === props.runningTask.task.id;
@@ -90,16 +91,13 @@ const TaskCard = defineComponent({
     });
 
     const { toggleCheck } = useCheck(props.task.id);
-    const isChecked = computed(() => {
-      return props.runningTask && props.task.id === props.runningTask.task.id;
-    });
     return {
       toggleTimer,
       isRunning,
       totalTimeSpent,
-      myCheckBoxModel,
+      checkBoxModel,
       toggleCheck,
-      isChecked,
+      // isChecked,
     };
   },
 });

@@ -13,7 +13,10 @@
         @change="changeValue"
         class="checkbox-input"
       />
-      <div class="virtual-checkbox" :class="[checkColor.state]">
+      <div
+        class="virtual-checkbox"
+        :class="currentValue ? checkColor : 'transparent'"
+      >
         <div class="virtual-check"></div>
       </div>
       <span
@@ -28,7 +31,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, reactive } from "@vue/composition-api";
+import { defineComponent, computed } from "@vue/composition-api";
 
 interface Props {
   value: string;
@@ -51,28 +54,28 @@ const Button = defineComponent({
     color: { type: String, default: "green" },
   },
   setup: (props: Props, { emit }) => {
+    const currentValue = computed(() => `${props.value}`);
+    const checkColor = computed(() => `${props.color}`);
     const checkLabel = computed(() => `${props.label}`);
     const checkIndex = computed(() => `${props.index}`);
     const position = computed(() => `${props.labelPosition}`);
-    let checkColor = reactive({ state: props.color });
-    checkColor = reactive({ state: "transparent" });
     const changeValue = (e: string | any) => {
       let currentValue = [...props.value];
       if (e.target.checked) {
         currentValue.push(e.target.value);
-        checkColor = reactive({ state: props.color });
       } else {
-        checkColor = reactive({ state: "transparent" });
         currentValue = currentValue.filter((item) => item !== e.target.value);
       }
       emit("input", currentValue);
     };
+
     return {
-      checkColor,
       checkLabel,
       checkIndex,
       changeValue,
       position,
+      currentValue,
+      checkColor,
     };
   },
 });

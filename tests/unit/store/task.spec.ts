@@ -149,7 +149,7 @@ describe("task store", () => {
     });
   });
 
-  describe("finished tasks", () => {
+  describe("finish tasks", () => {
     beforeEach(async () => {
       const tasks = [
         { title: "today's task 1", dueDate: new Date() },
@@ -164,13 +164,13 @@ describe("task store", () => {
     `, async () => {
       await taskStore.fetchInitData();
       const firstTask = taskStore.tasks[0];
-      await taskStore.finishedTask(firstTask.id);
+      await taskStore.finishTask(firstTask.id);
       expect(firstTask.finishedAt).toBeTruthy();
     });
     it("toggle returnTask", async () => {
       await taskStore.fetchInitData();
       const firstTask = taskStore.tasks[0];
-      await taskStore.returnTask(firstTask.id);
+      await taskStore.unfinishTask(firstTask.id);
       expect(firstTask.finishedAt).toBeNull();
     });
   });

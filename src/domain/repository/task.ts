@@ -21,7 +21,7 @@ export interface TaskRepository {
 
   /**
    * @param userId user ID
-   * @param task a task to add
+   * @param task a task to update
    */
   updateTask(userId: string, task: Task): Promise<void>;
 }

@@ -46,14 +46,14 @@ export class TaskStore extends VuexModule {
   }
 
   @Mutation
-  updateTask(task: Task) {
-    const index = this.tasks.findIndex((event) => event.id === task.id);
+  updateTask(currentTask: Task) {
+    const index = this.tasks.findIndex((task) => task.id === currentTask.id);
     if (index === -1) {
       return;
     }
     this.tasks = [
       ...this.tasks.slice(0, index),
-      task,
+      currentTask,
       ...this.tasks.slice(index + 1),
     ];
   }
@@ -109,7 +109,7 @@ export class TaskStore extends VuexModule {
   }
 
   @Action
-  async finishedTask(id: string) {
+  async finishTask(id: string) {
     await this.stopRunningTask();
     const maybeCompleteTask = this.tasks.find((item) => item.id === id);
     if (maybeCompleteTask) {
@@ -123,9 +123,9 @@ export class TaskStore extends VuexModule {
   }
 
   @Action
-  async returnTask(id: string) {
+  async unfinishTask(id: string) {
     const maybeCompleteTask = this.tasks.find((item) => item.id === id);
-    if (maybeCompleteTask && maybeCompleteTask.finishedAt) {
+    if (maybeCompleteTask?.finishedAt) {
       maybeCompleteTask.finishedAt = null;
       const updatedTask = await this.taskUsecase.updateTask(
         this.uid,

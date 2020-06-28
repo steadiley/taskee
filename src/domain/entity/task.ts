@@ -1,9 +1,6 @@
 import { InvalidArgumentError } from "@/errors";
 
 export class Task {
-  // private _updatedAt!: Date;
-  // private _createdAt!: Date;
-
   constructor(
     private _id: string,
     private _title: string,
