@@ -29,4 +29,8 @@ export class InmemoryTaskRepository implements TaskRepository {
   async updateTask(userId: string, task: Task): Promise<void> {
     this._tasks = this._tasks.concat(task);
   }
+
+  async deleteTask(userId: string, taskId: string): Promise<void> {
+    this._tasks = this._tasks.filter((task) => task.id !== taskId);
+  }
 }

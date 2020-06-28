@@ -1,23 +1,27 @@
 <template>
   <UiRow>
     <UiCol>
-      <UiCard :class="{ 'disabled-task': task.finishedAt }">
-        <UiCheckbox
-          v-model="checkBoxModel"
-          :index="task.id"
-          :input-value="task.id"
-          @input="toggleCheck"
-        />
-        <div>{{ task }}</div>
-        <div>{{ task.title }}</div>
-        <div>Total: {{ totalTimeSpent }} minutes</div>
-        <button
-          @click="toggleTimer(isRunning)"
-          :class="{ 'event-none': task.finishedAt }"
-        >
-          {{ isRunning ? "STOP" : "START" }}
-        </button>
-      </UiCard>
+      <div class="task-container">
+        <UiCard :class="{ 'disabled-task': task.finishedAt }">
+          <UiCheckbox
+            v-model="checkBoxModel"
+            :index="task.id"
+            :input-value="task.id"
+            @input="toggleCheck"
+          />
+          <div class="delete-button">
+            <DeleteButton @click="deleteTask(task.id)" />
+          </div>
+          <div>{{ task.title }}</div>
+          <div>Total: {{ totalTimeSpent }} minutes</div>
+          <button
+            @click="toggleTimer(isRunning)"
+            :class="{ 'event-none': task.finishedAt }"
+          >
+            {{ isRunning ? "STOP" : "START" }}
+          </button>
+        </UiCard>
+      </div>
     </UiCol>
   </UiRow>
 </template>
@@ -30,6 +34,7 @@ import UiCard from "@/components/ui/Card.vue";
 import UiRow from "@/components/ui/Row.vue";
 import UiCol from "@/components/ui/Col.vue";
 import UiCheckbox from "@/components/ui/Checkbox.vue";
+import DeleteButton from "@/components/ui/DeleteButton.vue";
 
 interface Props {
   task: Task;
@@ -72,6 +77,7 @@ const TaskCard = defineComponent({
     UiRow,
     UiCol,
     UiCheckbox,
+    DeleteButton,
   },
   props: {
     task: Object,
@@ -91,13 +97,21 @@ const TaskCard = defineComponent({
     });
 
     const { toggleCheck } = useCheck(props.task.id);
+
+    const deleteTask = async (taskId: string): Promise<void> => {
+      if (!confirm("Are you sure you want to delete this task?")) {
+        return;
+      }
+      await taskStore.deleteTask(taskId);
+    };
+
     return {
       toggleTimer,
       isRunning,
       totalTimeSpent,
       checkBoxModel,
       toggleCheck,
-      // isChecked,
+      deleteTask,
     };
   },
 });
@@ -109,12 +123,25 @@ export default TaskCard;
   border: 1px solid black;
   border-radius: 5px;
 }
+
 .disabled-task {
   border: 1px solid $green;
   color: $green;
   opacity: 0.5;
 }
+
 .event-none {
   pointer-events: none;
+}
+
+.task-container {
+  position: relative;
+  margin: 0 10px;
+}
+
+.delete-button {
+  position: absolute;
+  right: -3px;
+  top: -5px;
 }
 </style>

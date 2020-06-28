@@ -155,6 +155,21 @@ export class TaskStore extends VuexModule {
       : null;
   }
 
+  @Action
+  async deleteTask(id: string) {
+    // Explicitly stop the running task if it is to be deleted, so that bulletin board
+    if (this.runningTask?.task.id === id) {
+      await this.stopRunningTask();
+    }
+    await this.taskUsecase.deleteTask(this.uid, id);
+    const remainingTasks = this.tasks.filter((task) => task.id !== id);
+    const remainingTaskEvents = this.taskEvents.filter(
+      (event) => event.taskId !== id
+    );
+    this.setTasks(remainingTasks);
+    this.setTaskEvents(remainingTaskEvents);
+  }
+
   get calcTotalTimeSpentById() {
     return (taskId: string) => {
       return this.taskEvents

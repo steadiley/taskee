@@ -37,4 +37,8 @@ export class InmemoryTaskEventRepository implements TaskEventRepository {
     maybeTaskEvent.startedAt = taskEvent.startedAt;
     maybeTaskEvent.endedAt = taskEvent.endedAt;
   }
+
+  async deleteAllTaskEvents(userId: string, taskId: string): Promise<void> {
+    this._eventMap.delete(taskId);
+  }
 }

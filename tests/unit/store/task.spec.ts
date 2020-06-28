@@ -44,7 +44,7 @@ describe("task store", () => {
     firestoreClient.terminate();
   };
 
-  beforeAll(() => {
+  beforeAll(async () => {
     setupFirestore();
   });
 
@@ -61,6 +61,9 @@ describe("task store", () => {
     taskStore = getModule(TaskStore, store);
     userStore = getModule(UserStore, store);
     userStore.login({ userId: USER_ID, email: EMAIL });
+    // FIXME: Because store is initialized before each test, its state should be
+    // empty but it is not..., so initializing the state with the line below for now
+    await taskStore.fetchInitData();
   });
 
   afterEach(() => {
@@ -114,7 +117,6 @@ describe("task store", () => {
     1. sets running task and accosciate incomplete event to the started task once task is started
     2. clears running task and incomplete event once running task is stopped
     `, async () => {
-      await taskStore.fetchInitData();
       const firstTask = taskStore.tasks[0];
       await taskStore.startTask(firstTask.id);
       expect(taskStore.runningTask?.task.id).toBe(firstTask.id);
@@ -127,7 +129,6 @@ describe("task store", () => {
     });
 
     it("stops running task when another task is started", async () => {
-      await taskStore.fetchInitData();
       const firstTask = taskStore.tasks[0];
       await taskStore.startTask(firstTask.id);
       expect(taskStore.runningTask?.task.id).toBe(firstTask.id);
@@ -177,7 +178,6 @@ describe("task store", () => {
 
   describe("calcTotalTimeSpentById", () => {
     it("retuns the total millisec spent for given task ID", async () => {
-      await taskStore.fetchInitData();
       await taskStore.addTask({ title: "task" });
       const addedTask = taskStore.tasks[0];
 
@@ -217,6 +217,35 @@ describe("task store", () => {
       expect(taskStore.calcTotalTimeSpentById(addedTask.id)).toBe(
         (1 + 60 + 60 * 60 + 60 * 60 * 24) * 1000
       );
+    });
+  });
+
+  describe("deleteTask", () => {
+    beforeEach(async () => {
+      const tasks = [
+        { title: "today's task 1", dueDate: new Date() },
+        { title: "tomorrow's task", dueDate: dayjs().add(1, "day").toDate() },
+        { title: "today's task 2", dueDate: new Date() },
+      ];
+      for (const task of tasks) {
+        await taskStore.addTask(task);
+      }
+    });
+
+    it("delete only specified task", async () => {
+      const targetId = taskStore.tasks[0].id;
+      await taskStore.deleteTask(targetId);
+      const targetTask = taskStore.tasks.find((task) => task.id === targetId);
+      expect(targetTask).toBeUndefined();
+      const remainingTasks = taskStore.tasks;
+      expect(remainingTasks).toHaveLength(2);
+    });
+
+    it("does nothing when specified task does not exist", async () => {
+      const targetId = "non-existent-id";
+      expect(taskStore.deleteTask(targetId)).resolves.toBeUndefined();
+      const remainingTasks = taskStore.tasks;
+      expect(remainingTasks).toHaveLength(3);
     });
   });
 });
