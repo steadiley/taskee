@@ -59,7 +59,7 @@ export const useTimer = (taskId: string) => {
 export const useCheck = (taskId: string) => {
   const taskStore = useTaskStore();
   const toggleCheck = async (id: string) => {
-    if (id && id.length > 0) {
+    if (id.length > 0) {
       await taskStore.finishTask(taskId);
     } else {
       await taskStore.unfinishTask(taskId);
