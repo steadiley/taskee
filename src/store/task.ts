@@ -45,6 +45,19 @@ export class TaskStore extends VuexModule {
     ];
   }
 
+  @Mutation
+  updateTask(currentTask: Task) {
+    const index = this.tasks.findIndex((task) => task.id === currentTask.id);
+    if (index === -1) {
+      return;
+    }
+    this.tasks = [
+      ...this.tasks.slice(0, index),
+      currentTask,
+      ...this.tasks.slice(index + 1),
+    ];
+  }
+
   @Action
   async fetchInitData() {
     await this.fetchUnfinishedTasks();
@@ -93,6 +106,33 @@ export class TaskStore extends VuexModule {
       taskId: id,
     });
     this.addTaskEvent(taskEvent);
+  }
+
+  @Action
+  async finishTask(id: string) {
+    await this.stopRunningTask();
+    const maybeCompleteTask = this.tasks.find((item) => item.id === id);
+    if (maybeCompleteTask) {
+      maybeCompleteTask.finishedAt = new Date();
+      const updatedTask = await this.taskUsecase.updateTask(
+        this.uid,
+        maybeCompleteTask
+      );
+      this.updateTask(updatedTask);
+    }
+  }
+
+  @Action
+  async unfinishTask(id: string) {
+    const maybeCompleteTask = this.tasks.find((item) => item.id === id);
+    if (maybeCompleteTask?.finishedAt) {
+      maybeCompleteTask.finishedAt = null;
+      const updatedTask = await this.taskUsecase.updateTask(
+        this.uid,
+        maybeCompleteTask
+      );
+      this.updateTask(updatedTask);
+    }
   }
 
   get incompleteTaskEvent() {

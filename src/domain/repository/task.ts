@@ -21,6 +21,12 @@ export interface TaskRepository {
 
   /**
    * @param userId user ID
+   * @param task a task to update
+   */
+  updateTask(userId: string, task: Task): Promise<void>;
+
+  /**
+   * @param userId user ID
    * @param taskId task ID of a task to delete
    */
   deleteTask(userId: string, taskId: string): Promise<void>;

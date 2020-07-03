@@ -1,6 +1,6 @@
 import { getModule } from "vuex-module-decorators";
-import firebase from "firebase";
 import * as firebaseTest from "@firebase/testing";
+import firebase from "firebase";
 import dayjs from "dayjs";
 
 import { TaskStore } from "@/store/task";
@@ -147,6 +147,32 @@ describe("task store", () => {
           (taskEvent) => taskEvent.id === taskEventIdForFirstEvent
         )?.isEnded
       ).toBeTruthy();
+    });
+  });
+
+  describe("finish tasks", () => {
+    beforeEach(async () => {
+      const tasks = [
+        { title: "today's task 1", dueDate: new Date() },
+        { title: "today's task 2", dueDate: new Date() },
+      ];
+      for (const task of tasks) {
+        await taskStore.addTask(task);
+      }
+    });
+    it(`
+      toggle finishedTask
+    `, async () => {
+      await taskStore.fetchInitData();
+      const firstTask = taskStore.tasks[0];
+      await taskStore.finishTask(firstTask.id);
+      expect(firstTask.finishedAt).toBeTruthy();
+    });
+    it("toggle returnTask", async () => {
+      await taskStore.fetchInitData();
+      const firstTask = taskStore.tasks[0];
+      await taskStore.unfinishTask(firstTask.id);
+      expect(firstTask.finishedAt).toBeNull();
     });
   });
 

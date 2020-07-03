@@ -7,7 +7,17 @@ describe("TaskList.vue", () => {
   it("renders backlog tasks", async () => {
     const wrapper = shallowMount(TaskList, {
       propsData: {
-        tasks: [new Task("1", "brush my teeth"), new Task("2", "go to work")],
+        tasks: [
+          new Task(
+            "1",
+            "brush my teeth",
+            new Date(),
+            null,
+            new Date(),
+            new Date()
+          ),
+          new Task("2", "go to work", new Date(), null, new Date(), new Date()),
+        ],
       },
     });
     expect(wrapper.findAll("li")).toHaveLength(2);
