@@ -2,7 +2,7 @@
   <div id="app">
     <UiContainer>
       <div id="nav">
-        <router-link to="/">Home</router-link>
+        <router-link to="/">Homes</router-link>
         <div v-if="isLoggedIn">
           <div>Signed in as {{ email }}</div>
           <button @click="logout">Logout</button>
