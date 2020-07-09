@@ -20,25 +20,25 @@ jobs:
     - name: yarn install
       run: yarn install --frozen-lockfile
     - name: setup firebase emulator
-      run: npx firebase setup:emulators:firestore 
-    - name: yarn lint
-      run: yarn lint
-    - name: yarn test:unit
-      run: yarn test:unit
-    - name: yarn test:e2e
-      run: yarn test:e2e
+      run: npx firebase setup:emulators:firestore
     - name: Install firebase-tools
       run: yarn global add firebase-tools
     - name: Create .env file
       run: echo "${{ secrets.ENV_ }}" > .env
     - name: Install dependencies
       run: yarn --network-timeout 100000
+    - name: yarn lint
+      run: yarn lint
+    - name: yarn test:unit
+      run: yarn test:unit
+    - name: yarn test:e2e
+      run: yarn test:e2e
+    - name: Build app
+      run: yarn build
     - name: deploy to Firebase Hosting
       uses: w9jds/firebase-action@master
       with:
         args: deploy
-    - name: Build app
-      run: yarn build
     - name: Deploy
       run: firebase deploy --project $FIREBASE_PROJECT_ID --token $FIREBASE
     env:
