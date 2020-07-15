@@ -59,6 +59,7 @@ const Home = defineComponent({
       const now = dayjs();
       switch (route.query.dueDate) {
         case undefined:
+          return tasks.filter((task) => !task.dueDate);
         case "next-7-days":
           return tasks.filter(
             (task) =>
